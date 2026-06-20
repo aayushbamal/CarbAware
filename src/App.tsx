@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   LayoutGrid, Zap, Award, Settings as SettingsIcon, 
-  Leaf, Menu, ShoppingBag, LogOut, Bot
+  Leaf, Menu, LogOut, Bot
 } from 'lucide-react';
 import { OnboardingQuiz } from './components/OnboardingQuiz';
 import { Dashboard } from './components/Dashboard';
@@ -10,7 +10,6 @@ import { Sandbox } from './components/Sandbox';
 import { Settings } from './components/Settings';
 import { Ecodroid } from './components/Ecodroid';
 import { Login } from './components/Login';
-import { Marketplace } from './components/Marketplace';
 import type { UserProfile, CarbonData, DailyHabit, Achievement, HistoricalCalculation, AppSettings } from './types';
 import { calculateCarbonFootprint } from './utils/carbonCalculator';
 import { runAchievementScans } from './utils/achievementEngine';
@@ -400,17 +399,7 @@ function App() {
                 <Bot size={18} aria-hidden="true" /> Ecodroid AI
               </button>
             </li>
-            <li className="nav-item">
-              <button 
-                id="nav-marketplace"
-                data-testid="nav-marketplace"
-                className={`nav-button ${activeTab === 'marketplace' ? 'active' : ''}`}
-                onClick={() => navigateToTab('marketplace')}
-                disabled={!profile.onboarded}
-              >
-                <ShoppingBag size={18} aria-hidden="true" /> Marketplace
-              </button>
-            </li>
+
             <li className="nav-item">
               <button 
                 id="nav-settings"
@@ -527,11 +516,7 @@ function App() {
                 profile={profile}
               />
             )}
-            {activeTab === 'marketplace' && (
-              <Marketplace 
-                profile={profile} 
-              />
-            )}
+
             {activeTab === 'settings' && (
               <Settings 
                 profile={profile}
