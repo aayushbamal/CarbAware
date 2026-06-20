@@ -1,24 +1,63 @@
 import React, { useState } from 'react';
-import { RotateCcw, AlertTriangle, Check } from 'lucide-react';
-import type { UserProfile } from '../types';
+import { RotateCcw, AlertTriangle, Check, User, Bot, Layout, Bell, Download } from 'lucide-react';
+import type { UserProfile, AppSettings } from '../types';
 
 interface SettingsProps {
   profile: UserProfile;
-  onUpdateSettings: (settings: { theme: 'forest' | 'ocean' | 'solar' }) => void;
+  onUpdateSettings: (updates: {
+    name?: string;
+    theme: 'forest' | 'ocean' | 'solar';
+    settings: AppSettings;
+  }) => void;
   onResetData: () => void;
 }
 
 export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, onResetData }) => {
+  // Local states initialized with profile settings or sensible defaults
   const [theme, setTheme] = useState<'forest' | 'ocean' | 'solar'>(profile.theme);
+  const [displayName, setDisplayName] = useState<string>(profile.name || '');
+  const [avatarEmoji, setAvatarEmoji] = useState<string>(profile.settings?.avatarEmoji || '🌱');
+  const [persona, setPersona] = useState<AppSettings['assistantPersona']>(profile.settings?.assistantPersona || 'friendly');
+  const [temperature, setTemperature] = useState<number>(profile.settings?.modelTemperature || 0.7);
+  const [compactMode, setCompactMode] = useState<boolean>(profile.settings?.compactMode || false);
+  const [reduceMotion, setReduceMotion] = useState<boolean>(profile.settings?.reduceMotion || false);
+  const [panelOpacity, setPanelOpacity] = useState<number>(profile.settings?.panelOpacity || 0.12);
+  const [notifyHabits, setNotifyHabits] = useState<boolean>(profile.settings?.notifyHabits || true);
+  const [notifyDigest, setNotifyDigest] = useState<boolean>(profile.settings?.notifyDigest || true);
+  const [notifyAchievements, setNotifyAchievements] = useState<boolean>(profile.settings?.notifyAchievements || true);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {
     onUpdateSettings({
-      theme
+      name: displayName,
+      theme: theme,
+      settings: {
+        avatarEmoji,
+        assistantPersona: persona,
+        modelTemperature: temperature,
+        compactMode,
+        reduceMotion,
+        panelOpacity,
+        notifyHabits,
+        notifyDigest,
+        notifyAchievements
+      }
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
+  };
+
+  // Export profile data as JSON
+  const handleExportData = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(profile, null, 2));
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `carbaware_profile_${profile.name.toLowerCase().replace(/\s+/g, '_')}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
   };
 
   return (
@@ -26,30 +65,213 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
       {/* Header */}
       <div>
         <h1 style={{ fontSize: '32px', fontWeight: 800 }}>Platform Settings</h1>
-        <p style={{ color: 'var(--text-sub)' }}>Manage your design configurations and database profiles.</p>
+        <p style={{ color: 'var(--text-sub)' }}>Customize your user profile, AI Ecodroid persona, notifications, and application design.</p>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-        {/* Theme Settings Panel */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '20px' }}>
+        
+        {/* Profile Details Panel */}
         <div className="glass-card">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-            <span style={{ fontSize: '20px' }}>🎨</span>
-            <h3>Visual Customization</h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <User size={20} style={{ color: 'var(--primary)' }} />
+            <h3>Profile Customization</h3>
           </div>
 
-          <div className="settings-group mb-6">
-            <label className="settings-label">Color Theme</label>
-            <select 
-              className="settings-select"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value as any)}
-            >
-              <option value="forest">Forest Green (Eco Dark)</option>
-              <option value="ocean">Ocean Breeze (Water Conservation Dark)</option>
-              <option value="solar">Solar Energy (Renewable Glow Dark)</option>
-            </select>
+          <div className="grid-2" style={{ gap: '20px' }}>
+            <div className="settings-group">
+              <label className="settings-label">Display Name</label>
+              <input 
+                type="text" 
+                className="styled-input" 
+                style={{ width: '100%', height: '40px', paddingLeft: '14px' }}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+            </div>
+
+            <div className="settings-group">
+              <label className="settings-label">Profile Avatar Emoji</label>
+              <select 
+                className="settings-select"
+                value={avatarEmoji}
+                onChange={(e) => setAvatarEmoji(e.target.value)}
+              >
+                <option value="🌱">🌱 Sprout</option>
+                <option value="🌲">🌲 Pine Tree</option>
+                <option value="🚲">🚲 Bicycle</option>
+                <option value="☀️">☀️ Solar Sun</option>
+                <option value="🥗">🥗 Salad Bowl</option>
+                <option value="🌎">🌎 Earth Globe</option>
+                <option value="⚡">⚡ Clean Energy</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Ecodroid AI Coach Settings */}
+        <div className="glass-card">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <Bot size={20} style={{ color: 'var(--primary)' }} />
+            <h3>Ecodroid AI Preferences</h3>
           </div>
 
+          <div className="grid-2" style={{ gap: '20px' }}>
+            <div className="settings-group">
+              <label className="settings-label">Assistant Persona</label>
+              <select 
+                className="settings-select"
+                value={persona}
+                onChange={(e) => setPersona(e.target.value as any)}
+              >
+                <option value="friendly">Friendly Assistant (Standard) 🤖</option>
+                <option value="strict">Strict Environmentalist (Raw Numbers) 🧬</option>
+                <option value="optimist">Eco-Optimist (Hopeful Motivator) ☀️</option>
+                <option value="general">Climate Commander (Tactical Action) 🎖️</option>
+              </select>
+            </div>
+
+            <div className="settings-group">
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <label className="settings-label" style={{ margin: 0 }}>Model Temperature (Creativity)</label>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)' }}>{temperature}</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Precise</span>
+                <input 
+                  type="range"
+                  min="0.1"
+                  max="1.0"
+                  step="0.1"
+                  style={{ flexGrow: 1 }}
+                  value={temperature}
+                  onChange={(e) => setTemperature(parseFloat(e.target.value))}
+                />
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Creative</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Visual Customization & Glassmorphism Panel */}
+        <div className="glass-card">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <Layout size={20} style={{ color: 'var(--primary)' }} />
+            <h3>Visual & Theme Settings</h3>
+          </div>
+
+          <div className="grid-2" style={{ gap: '20px', marginBottom: '20px' }}>
+            <div className="settings-group">
+              <label className="settings-label">Color Theme</label>
+              <select 
+                className="settings-select"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value as any)}
+              >
+                <option value="forest">Forest Green (Eco Dark)</option>
+                <option value="ocean">Ocean Breeze (Water Conservation)</option>
+                <option value="solar">Solar Energy (Renewable Glow)</option>
+              </select>
+            </div>
+
+            <div className="settings-group">
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <label className="settings-label" style={{ margin: 0 }}>Glass Panel Opacity</label>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)' }}>{(panelOpacity * 100).toFixed(0)}%</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Clear</span>
+                <input 
+                  type="range"
+                  min="0.03"
+                  max="0.4"
+                  step="0.01"
+                  style={{ flexGrow: 1 }}
+                  value={panelOpacity}
+                  onChange={(e) => setPanelOpacity(parseFloat(e.target.value))}
+                />
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Frosted</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+              <input 
+                type="checkbox" 
+                checked={compactMode}
+                onChange={(e) => setCompactMode(e.target.checked)}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', fontSize: '13px' }}>
+                <strong>Compact Interface Mode</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Reduces card paddings.</span>
+              </div>
+            </label>
+
+            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+              <input 
+                type="checkbox" 
+                checked={reduceMotion}
+                onChange={(e) => setReduceMotion(e.target.checked)}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', fontSize: '13px' }}>
+                <strong>Reduce Motion</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Disables sliding micro-animations.</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Notifications preferences */}
+        <div className="glass-card">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
+            <Bell size={20} style={{ color: 'var(--primary)' }} />
+            <h3>Notification Preferences</h3>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
+            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+              <input 
+                type="checkbox" 
+                checked={notifyHabits}
+                onChange={(e) => setNotifyHabits(e.target.checked)}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', fontSize: '13px' }}>
+                <strong>Habit Reminders</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Alert me to log daily actions.</span>
+              </div>
+            </label>
+
+            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+              <input 
+                type="checkbox" 
+                checked={notifyDigest}
+                onChange={(e) => setNotifyDigest(e.target.checked)}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', fontSize: '13px' }}>
+                <strong>Weekly Digest Reports</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Send footprint savings summary.</span>
+              </div>
+            </label>
+
+            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+              <input 
+                type="checkbox" 
+                checked={notifyAchievements}
+                onChange={(e) => setNotifyAchievements(e.target.checked)}
+              />
+              <div style={{ display: 'flex', flexDirection: 'column', fontSize: '13px' }}>
+                <strong>Milestone Awards</strong>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Notify on unlocked achievements.</span>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        {/* Save Options Bar */}
+        <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <button type="button" className="btn btn-secondary" onClick={handleExportData}>
+            <Download size={16} /> Export Profile Data (JSON)
+          </button>
           <button type="button" className="btn btn-primary" onClick={handleSave}>
             {saved ? (
               <>
@@ -61,10 +283,8 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
           </button>
         </div>
 
-
-
         {/* Danger Zone Factory Reset */}
-        <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.25)' }}>
+        <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.25)', marginTop: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
             <AlertTriangle size={20} style={{ color: 'var(--danger)' }} />
             <h3 style={{ color: '#ffffff' }}>Danger Zone</h3>

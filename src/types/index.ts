@@ -49,6 +49,18 @@ export interface Achievement {
   unlockedAt?: string;
   requirement: string;
 }
+export interface AppSettings {
+  avatarEmoji: string;
+  assistantPersona: 'friendly' | 'strict' | 'optimist' | 'general';
+  modelTemperature: number;
+  compactMode: boolean;
+  reduceMotion: boolean;
+  panelOpacity: number; // Percentage opacity from 0.05 to 1
+  notifyHabits: boolean;
+  notifyDigest: boolean;
+  notifyAchievements: boolean;
+}
+
 export interface UserProfile {
   name: string;
   onboarded: boolean;
@@ -62,6 +74,7 @@ export interface UserProfile {
   theme: 'forest' | 'ocean' | 'solar';
   offsetTonnes: number; // Tracks purchased carbon offsets (tonnes CO2e)
   promptWarsState?: PromptWarsState;
+  settings?: AppSettings;
 }
 
 export interface BattleMessage {

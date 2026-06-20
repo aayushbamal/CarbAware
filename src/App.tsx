@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { 
   LayoutGrid, Zap, Award, Settings as SettingsIcon, 
-  Leaf, User, Menu, Heart, ShoppingBag, LogOut 
+  Leaf, Menu, Heart, ShoppingBag, LogOut, Bot
 } from 'lucide-react';
 import { OnboardingQuiz } from './components/OnboardingQuiz';
 import { Dashboard } from './components/Dashboard';
@@ -9,10 +9,10 @@ import { HabitsTracker } from './components/HabitsTracker';
 import { Sandbox } from './components/Sandbox';
 import { Settings } from './components/Settings';
 import { OffsetProjects } from './components/OffsetProjects';
-import { PromptWars } from './components/PromptWars';
+import { Ecodroid } from './components/Ecodroid';
 import { Login } from './components/Login';
 import { Marketplace } from './components/Marketplace';
-import type { UserProfile, CarbonData, DailyHabit, Achievement, HistoricalCalculation, PromptWarsState } from './types';
+import type { UserProfile, CarbonData, DailyHabit, Achievement, HistoricalCalculation, AppSettings } from './types';
 import { calculateCarbonFootprint } from './utils/carbonCalculator';
 import { supabase } from './utils/supabaseClient';
 import type { Session } from '@supabase/supabase-js';
@@ -39,6 +39,18 @@ const DEFAULT_ACHIEVEMENTS: Achievement[] = [
   { id: 'ac_master_persuader', title: 'Master Persuader', description: 'Win a Prompt Battle in exactly 1 turn.', badge: '🎯', unlocked: false, requirement: '1-turn battle victory' }
 ];
 
+const DEFAULT_SETTINGS: AppSettings = {
+  avatarEmoji: '🌱',
+  assistantPersona: 'friendly',
+  modelTemperature: 0.7,
+  compactMode: false,
+  reduceMotion: false,
+  panelOpacity: 0.12,
+  notifyHabits: true,
+  notifyDigest: true,
+  notifyAchievements: true
+};
+
 const INITIAL_PROFILE: UserProfile = {
   name: 'Eco Champion',
   onboarded: false,
@@ -55,7 +67,8 @@ const INITIAL_PROFILE: UserProfile = {
     completedOpponents: [],
     highScores: {},
     purchasedCards: []
-  }
+  },
+  settings: DEFAULT_SETTINGS
 };
 
 function App() {
@@ -110,6 +123,13 @@ function App() {
           };
         }
         
+        if (!parsed.settings) {
+          parsed.settings = DEFAULT_SETTINGS;
+        } else {
+          // Merge defaults in case new settings keys are added
+          parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
+        }
+        
         setProfile(parsed);
       } catch (err) {
         console.error("Error reading saved user profile, resetting...", err);
@@ -131,6 +151,53 @@ function App() {
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', profile.theme);
   }, [profile.theme]);
+
+  // Dynamic opacity, compact mode, and reduced motion custom style sheet
+  useEffect(() => {
+    const opacity = profile.settings?.panelOpacity !== undefined ? profile.settings.panelOpacity : 0.12;
+    const isCompact = profile.settings?.compactMode || false;
+    const isReducedMotion = profile.settings?.reduceMotion || false;
+
+    let styleEl = document.getElementById('dynamic-theme-overrides');
+    if (!styleEl) {
+      styleEl = document.createElement('style');
+      styleEl.id = 'dynamic-theme-overrides';
+      document.head.appendChild(styleEl);
+    }
+    
+    styleEl.innerHTML = `
+      .glass-card {
+        background: rgba(13, 22, 18, ${opacity}) !important;
+        transition: var(--transition-smooth);
+      }
+      [data-theme="ocean"] .glass-card {
+        background: rgba(11, 21, 30, ${opacity}) !important;
+      }
+      [data-theme="solar"] .glass-card {
+        background: rgba(27, 20, 10, ${opacity}) !important;
+      }
+      ${isCompact ? `
+        .glass-card, .opponent-card, .card-item, .habits-container, .sandbox-sliders-container {
+          padding: 12px 16px !important;
+        }
+        .main-content {
+          padding: 16px !important;
+        }
+        .grid-2 {
+          gap: 16px !important;
+        }
+      ` : ''}
+      ${isReducedMotion ? `
+        *, *::before, *::after {
+          animation-delay: -1ms !important;
+          animation-duration: -1ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0s !important;
+          scroll-behavior: auto !important;
+        }
+      ` : ''}
+    `;
+  }, [profile.settings, profile.theme]);
 
   // 4. Onboarding Complete Handler
   const handleOnboardingComplete = (data: CarbonData) => {
@@ -174,10 +241,16 @@ function App() {
   };
 
   // 5. Update settings configuration
-  const handleUpdateSettings = (settings: { theme: 'forest' | 'ocean' | 'solar' }) => {
+  const handleUpdateSettings = (updates: {
+    name?: string;
+    theme: 'forest' | 'ocean' | 'solar';
+    settings: AppSettings;
+  }) => {
     setProfile(prev => ({
       ...prev,
-      theme: settings.theme
+      name: updates.name || prev.name,
+      theme: updates.theme,
+      settings: updates.settings
     }));
   };
 
@@ -188,42 +261,7 @@ function App() {
     setActiveTab('dashboard');
   };
 
-  // State update handlers for Prompt Wars
-  const handleUpdatePoints = (pointsGained: number) => {
-    setProfile(prev => {
-      const updatedProfile = {
-        ...prev,
-        totalPoints: Math.max(0, prev.totalPoints + pointsGained)
-      };
-      return runAchievementScans(updatedProfile);
-    });
-  };
-
-  const handleAddAchievement = (achievementId: string) => {
-    setProfile(prev => {
-      let madeChanges = false;
-      const updatedAchievements = prev.achievements.map(ach => {
-        if (ach.id === achievementId && !ach.unlocked) {
-          madeChanges = true;
-          return { ...ach, unlocked: true, unlockedAt: new Date().toLocaleDateString() };
-        }
-        return ach;
-      });
-      if (!madeChanges) return prev;
-      return {
-        ...prev,
-        achievements: updatedAchievements,
-        totalPoints: prev.totalPoints + 20 // award bonus points
-      };
-    });
-  };
-
-  const handleUpdatePromptWarsState = (state: PromptWarsState) => {
-    setProfile(prev => ({
-      ...prev,
-      promptWarsState: state
-    }));
-  };
+  // State update handlers
 
   // 7. Habits Toggle Checkbox Handler
   const handleToggleHabit = (habitId: string) => {
@@ -412,11 +450,11 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
-                className={`nav-button ${activeTab === 'promptwars' ? 'active' : ''}`}
-                onClick={() => navigateToTab('promptwars')}
+                className={`nav-button ${activeTab === 'ecodroid' ? 'active' : ''}`}
+                onClick={() => navigateToTab('ecodroid')}
                 disabled={!profile.onboarded}
               >
-                <Zap size={18} /> Prompt Arena
+                <Bot size={18} /> Ecodroid AI
               </button>
             </li>
             <li className="nav-item">
@@ -443,8 +481,8 @@ function App() {
           <div className="sidebar-footer" style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {profile.onboarded && (
               <div className="user-summary-card">
-                <div className="avatar-circle">
-                  <User size={18} />
+                <div className="avatar-circle" style={{ fontSize: '18px' }}>
+                  {profile.settings?.avatarEmoji || '🌱'}
                 </div>
                 <div className="user-info">
                   <span className="user-name">{profile.name}</span>
@@ -538,12 +576,9 @@ function App() {
                 onPurchaseOffset={handlePurchaseOffset} 
               />
             )}
-            {activeTab === 'promptwars' && (
-              <PromptWars 
+            {activeTab === 'ecodroid' && (
+              <Ecodroid 
                 profile={profile}
-                onUpdatePoints={handleUpdatePoints}
-                onAddAchievement={handleAddAchievement}
-                onUpdatePromptWarsState={handleUpdatePromptWarsState}
               />
             )}
             {activeTab === 'marketplace' && (

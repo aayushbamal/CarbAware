@@ -67,6 +67,32 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
     }
   };
 
+  const handleGoogleSignIn = async () => {
+    if (!isSupabaseConfigured) {
+      setErrorMsg("Supabase is not configured. Please supply environment variables or click Bypass.");
+      return;
+    }
+
+    setLoading(true);
+    setErrorMsg(null);
+    setSuccessMsg(null);
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) throw error;
+    } catch (err: any) {
+      console.error(err);
+      setErrorMsg(err.message || "Failed to initiate Google sign-in.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="login-wrapper">
       <div className="login-card glass-card">
@@ -224,6 +250,37 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
                   {isSignUp ? 'Create Eco Account' : 'Access Account'} <ArrowRight size={16} />
                 </>
               )}
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '8px 0' }}>
+              <div style={{ flexGrow: 1, height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+              <span style={{ fontSize: '11px', color: 'var(--text-sub)', textTransform: 'uppercase' }}>or</span>
+              <div style={{ flexGrow: 1, height: '1px', background: 'rgba(255,255,255,0.06)' }} />
+            </div>
+
+            <button 
+              type="button" 
+              className="btn btn-secondary" 
+              style={{ 
+                width: '100%', 
+                height: '44px', 
+                justifyContent: 'center', 
+                background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.06)',
+                color: '#ffffff',
+                gap: '10px',
+                marginTop: '4px'
+              }}
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+            >
+              <svg width="18" height="18" viewBox="0 0 48 48">
+                <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.5 24c0-1.61-.15-3.16-.42-4.67H24v9.09h12.75c-.53 2.87-2.13 5.31-4.53 6.91l7.02 5.44C43.34 36.36 46.5 30.79 46.5 24z"/>
+                <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.02-5.44c-1.95 1.3-4.48 2.1-8.87 2.1-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                <path fill="#FBBC05" d="M10.54 28.94C10.04 27.44 9.75 25.8 9.75 24s.29-3.44.79-4.94l-7.98-6.19C.99 16.24 0 20 0 24s.99 7.76 2.56 11.13l7.98-6.19z"/>
+              </svg>
+              Continue with Google
             </button>
           </form>
         )}
