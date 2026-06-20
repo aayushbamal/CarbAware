@@ -4,7 +4,7 @@ import {
   Sparkles, Award, Gauge, Activity, MessageSquare
 } from 'lucide-react';
 import type { UserProfile, BattleMessage, PromptOpponent, PromptWarsState } from '../types';
-import { GEMINI_API_KEY } from '../config';
+import { GEMINI_API_KEY, NVIDIA_API_KEY } from '../config';
 
 interface PromptWarsProps {
   profile: UserProfile;
@@ -282,6 +282,95 @@ export const PromptWars: React.FC<PromptWarsProps> = ({
   };
 
   // Gemini Live AI Persuasion Battle Request
+  // NVIDIA NIM AI Persuasion Battle Request (Llama 3.3 70B Model)
+  const runNVIDIAAI = async (
+    opponent: PromptOpponent, 
+    prompt: string, 
+    chatHistory: BattleMessage[], 
+    cardId: string | null
+  ) => {
+    if (!NVIDIA_API_KEY) throw new Error("NVIDIA API Key is missing");
+
+    const cardDetails = cardId 
+      ? CARDS_TEMPLATE.find(c => c.id === cardId) 
+      : null;
+    const cardInstruction = cardDetails 
+      ? `\nModifier applied: User activated a '${cardDetails.name}' card which has the effect: '${cardDetails.description}'. Incorporate this impact (e.g. drop emissions/resistance more if prompt matches the theme).`
+      : "";
+
+    // Format chat history
+    const historyString = chatHistory
+      .slice(-4)
+      .map(m => `${m.sender === 'player' ? 'Eco-Champion' : 'Opponent'}: "${m.text}"`)
+      .join('\n');
+
+    const systemPrompt = `You are simulating a text message battle for a game called Prompt Wars. The user is playing as an Eco-Champion trying to convince you, ${opponent.name}, to reduce your carbon footprint.
+Your profile:
+- Bio: ${opponent.bio}
+- Starting Resistance: ${opponent.resistance}%
+- Current Carbon Emissions: ${opponent.currentEmissions} tonnes CO2e per year.
+${cardInstruction}
+
+Here is the conversation history:
+${historyString}
+
+Here is the user's new prompt message:
+"${prompt}"
+
+Analyze the user's message. Assess if their argument addresses your character's worries.
+
+Provide your response strictly in the following JSON format:
+{
+  "reply": "Your dialogue response as the character, reacting to the user (max 3 sentences). Keep it highly in-character.",
+  "emissionsDrop": [A float representing carbon footprint reduction, range 0.1 to 3.5],
+  "resistanceDrop": [An integer representing how much resistance was lowered, range 2 to 30],
+  "feedback": "A one-sentence analytical review from the 'Eco-Coach' advising the player on their prompt engineering tactic."
+}`;
+
+    const response = await fetch(
+      '/api/chat',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${NVIDIA_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: 'meta/llama-3.3-70b-instruct',
+          messages: [
+            {
+              role: 'user',
+              content: systemPrompt
+            }
+          ],
+          response_format: {
+            type: "json_object"
+          },
+          temperature: 0.2,
+          max_tokens: 1024
+        })
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`NVIDIA API returned status ${response.status}. Please check your key or try later.`);
+    }
+
+    const data = await response.json();
+    const resultText = data.choices?.[0]?.message?.content;
+    if (!resultText) {
+      throw new Error("No content received from NVIDIA model.");
+    }
+
+    const parsed = JSON.parse(resultText.trim());
+    return {
+      reply: parsed.reply || "I guess you have a point, but I'm still skeptical.",
+      emissionsDrop: Number(parsed.emissionsDrop) || 0.5,
+      resistanceDrop: Number(parsed.resistanceDrop) || 5,
+      feedback: parsed.feedback || "Your prompt has been sent. Try adapting to the opponent's values."
+    };
+  };
+
   const runGeminiLiveAI = async (
     opponent: PromptOpponent, 
     prompt: string, 
@@ -388,7 +477,10 @@ Provide your response strictly in the following JSON format, with no markdown ta
     let simResult;
 
     try {
-      if (apiKey) {
+      if (NVIDIA_API_KEY) {
+        // Run NVIDIA Llama call
+        simResult = await runNVIDIAAI(activeOpponent, inputPrompt, newMessages, selectedCard);
+      } else if (apiKey) {
         // Run Gemini Live call
         simResult = await runGeminiLiveAI(activeOpponent, inputPrompt, newMessages, selectedCard);
       } else {
@@ -449,7 +541,7 @@ Provide your response strictly in the following JSON format, with no markdown ta
 
     } catch (err: any) {
       console.error(err);
-      setApiError(err.message || "Failed to contact Gemini AI. Running offline heuristics check instead...");
+      setApiError(err.message || "Failed to contact the AI model. Running offline heuristics check instead...");
       
       // Fallback immediately to local engine on error
       const localResult = runLocalSimulation(activeOpponent.id, inputPrompt, selectedCard);
@@ -548,8 +640,8 @@ Provide your response strictly in the following JSON format, with no markdown ta
             </div>
             
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              <span className={`status-badge ${apiKey ? 'live' : 'offline'}`}>
-                <Sparkles size={14} /> {apiKey ? 'Gemini Live Active' : 'Offline Simulator Mode'}
+              <span className={`status-badge ${NVIDIA_API_KEY ? 'live' : apiKey ? 'live' : 'offline'}`}>
+                <Sparkles size={14} /> {NVIDIA_API_KEY ? 'NVIDIA Llama Active' : apiKey ? 'Gemini Live Active' : 'Offline Simulator Mode'}
               </span>
             </div>
           </div>
@@ -655,8 +747,8 @@ Provide your response strictly in the following JSON format, with no markdown ta
               <ArrowLeft size={16} /> Leave Arena
             </button>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <span className={`status-badge ${apiKey ? 'live' : 'offline'}`}>
-                {apiKey ? 'Gemini AI Connection Active' : 'Offline Engine'}
+              <span className={`status-badge ${NVIDIA_API_KEY ? 'live' : apiKey ? 'live' : 'offline'}`}>
+                {NVIDIA_API_KEY ? 'NVIDIA Llama Active' : apiKey ? 'Gemini AI Connection Active' : 'Offline Engine'}
               </span>
             </div>
           </div>
