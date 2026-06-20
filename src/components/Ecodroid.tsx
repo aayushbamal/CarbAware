@@ -416,7 +416,8 @@ Guidelines:
                     background: 'rgba(255,255,255,0.01)',
                     border: '1px solid rgba(255,255,255,0.05)',
                     width: '100%',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    color: 'var(--text-main)'
                   }}
                   disabled={isLoading}
                   onClick={() => handleSend(chip.prompt)}

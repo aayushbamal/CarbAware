@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { 
   LayoutGrid, Zap, Award, Settings as SettingsIcon, 
-  Leaf, Menu, Heart, ShoppingBag, LogOut, Bot
+  Leaf, Menu, ShoppingBag, LogOut, Bot
 } from 'lucide-react';
 import { OnboardingQuiz } from './components/OnboardingQuiz';
 import { Dashboard } from './components/Dashboard';
 import { HabitsTracker } from './components/HabitsTracker';
 import { Sandbox } from './components/Sandbox';
 import { Settings } from './components/Settings';
-import { OffsetProjects } from './components/OffsetProjects';
 import { Ecodroid } from './components/Ecodroid';
 import { Login } from './components/Login';
 import { Marketplace } from './components/Marketplace';
@@ -329,17 +328,7 @@ function App() {
     setActiveTab('dashboard');
   };
 
-  // Offset purchase handler
-  const handlePurchaseOffset = (tonnes: number, pointsCost: number) => {
-    setProfile(prev => {
-      if (prev.totalPoints < pointsCost) return prev;
-      return {
-        ...prev,
-        totalPoints: prev.totalPoints - pointsCost,
-        offsetTonnes: (prev.offsetTonnes || 0) + tonnes
-      };
-    });
-  };
+
 
 
 
@@ -391,15 +380,6 @@ function App() {
                 disabled={!profile.onboarded}
               >
                 <Zap size={18} aria-hidden="true" /> Sandbox Sim
-              </button>
-            </li>
-            <li className="nav-item">
-              <button 
-                className={`nav-button ${activeTab === 'offsets' ? 'active' : ''}`}
-                onClick={() => navigateToTab('offsets')}
-                disabled={!profile.onboarded}
-              >
-                <Heart size={18} aria-hidden="true" /> Offset Center
               </button>
             </li>
             <li className="nav-item">
@@ -522,12 +502,6 @@ function App() {
               <Sandbox 
                 profile={profile} 
                 onUpdateProfileData={handleUpdateProfileData} 
-              />
-            )}
-            {activeTab === 'offsets' && (
-              <OffsetProjects 
-                profile={profile} 
-                onPurchaseOffset={handlePurchaseOffset} 
               />
             )}
             {activeTab === 'ecodroid' && (
