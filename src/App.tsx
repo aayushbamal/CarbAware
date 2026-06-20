@@ -130,6 +130,7 @@ function App() {
           parsed.settings = { ...DEFAULT_SETTINGS, ...parsed.settings };
         }
         
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setProfile(parsed);
       } catch (err) {
         console.error("Error reading saved user profile, resetting...", err);
@@ -357,6 +358,8 @@ function App() {
           <nav className="nav-links">
             <li className="nav-item">
               <button 
+                id="nav-dashboard"
+                data-testid="nav-dashboard"
                 className={`nav-button ${activeTab === 'dashboard' ? 'active' : ''}`}
                 onClick={() => navigateToTab('dashboard')}
                 disabled={!profile.onboarded}
@@ -366,6 +369,8 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
+                id="nav-habits"
+                data-testid="nav-habits"
                 className={`nav-button ${activeTab === 'habits' ? 'active' : ''}`}
                 onClick={() => navigateToTab('habits')}
                 disabled={!profile.onboarded}
@@ -375,6 +380,8 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
+                id="nav-sandbox"
+                data-testid="nav-sandbox"
                 className={`nav-button ${activeTab === 'sandbox' ? 'active' : ''}`}
                 onClick={() => navigateToTab('sandbox')}
                 disabled={!profile.onboarded}
@@ -384,6 +391,8 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
+                id="nav-ecodroid"
+                data-testid="nav-ecodroid"
                 className={`nav-button ${activeTab === 'ecodroid' ? 'active' : ''}`}
                 onClick={() => navigateToTab('ecodroid')}
                 disabled={!profile.onboarded}
@@ -393,6 +402,8 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
+                id="nav-marketplace"
+                data-testid="nav-marketplace"
                 className={`nav-button ${activeTab === 'marketplace' ? 'active' : ''}`}
                 onClick={() => navigateToTab('marketplace')}
                 disabled={!profile.onboarded}
@@ -402,6 +413,8 @@ function App() {
             </li>
             <li className="nav-item">
               <button 
+                id="nav-settings"
+                data-testid="nav-settings"
                 className={`nav-button ${activeTab === 'settings' ? 'active' : ''}`}
                 onClick={() => navigateToTab('settings')}
               >
@@ -427,6 +440,8 @@ function App() {
             
             {session && (
               <button 
+                id="nav-logout"
+                data-testid="nav-logout"
                 type="button" 
                 className="btn btn-secondary" 
                 style={{ width: '100%', fontSize: '13px', padding: '8px 12px', justifyContent: 'center', marginTop: '8px' }}
@@ -437,6 +452,8 @@ function App() {
             )}
             {!session && isBypassed && (
               <button 
+                id="nav-logout"
+                data-testid="nav-logout"
                 type="button" 
                 className="btn btn-secondary" 
                 style={{ width: '100%', fontSize: '13px', padding: '8px 12px', justifyContent: 'center', marginTop: '8px' }}
@@ -500,6 +517,7 @@ function App() {
             )}
             {activeTab === 'sandbox' && (
               <Sandbox 
+                key={profile.currentData ? 'active' : 'inactive'}
                 profile={profile} 
                 onUpdateProfileData={handleUpdateProfileData} 
               />

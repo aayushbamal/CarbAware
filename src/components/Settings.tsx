@@ -82,6 +82,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               <label htmlFor="settings-display-name" className="settings-label">Display Name</label>
               <input 
                 id="settings-display-name"
+                data-testid="settings-display-name"
                 type="text" 
                 className="styled-input" 
                 style={{ width: '100%', height: '40px', paddingLeft: '14px' }}
@@ -94,6 +95,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               <label htmlFor="settings-avatar-emoji" className="settings-label">Profile Avatar Emoji</label>
               <select 
                 id="settings-avatar-emoji"
+                data-testid="settings-avatar-emoji"
                 className="settings-select"
                 value={avatarEmoji}
                 onChange={(e) => setAvatarEmoji(e.target.value)}
@@ -122,9 +124,10 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               <label htmlFor="settings-assistant-persona" className="settings-label">Assistant Persona</label>
               <select 
                 id="settings-assistant-persona"
+                data-testid="settings-assistant-persona"
                 className="settings-select"
                 value={persona}
-                onChange={(e) => setPersona(e.target.value as any)}
+                onChange={(e) => setPersona(e.target.value as AppSettings['assistantPersona'])}
               >
                 <option value="friendly">Friendly Assistant (Standard) 🤖</option>
                 <option value="strict">Strict Environmentalist (Raw Numbers) 🧬</option>
@@ -142,6 +145,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
                 <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Precise</span>
                 <input 
                   id="settings-model-temperature"
+                  data-testid="settings-model-temperature"
                   type="range"
                   min="0.1"
                   max="1.0"
@@ -168,9 +172,10 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               <label htmlFor="settings-color-theme" className="settings-label">Color Theme</label>
               <select 
                 id="settings-color-theme"
+                data-testid="settings-color-theme"
                 className="settings-select"
                 value={theme}
-                onChange={(e) => setTheme(e.target.value as any)}
+                onChange={(e) => setTheme(e.target.value as 'forest' | 'ocean' | 'solar')}
               >
                 <option value="forest">Forest Green (Eco Dark)</option>
                 <option value="ocean">Ocean Breeze (Water Conservation)</option>
@@ -187,6 +192,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
                 <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Translucent</span>
                 <input 
                   id="settings-panel-opacity"
+                  data-testid="settings-panel-opacity"
                   type="range"
                   min="0.05"
                   max="0.95"
@@ -208,6 +214,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             <label htmlFor="settings-compact-mode" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
                 id="settings-compact-mode"
+                data-testid="settings-compact-mode"
                 type="checkbox" 
                 checked={compactMode}
                 onChange={(e) => setCompactMode(e.target.checked)}
@@ -221,6 +228,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             <label htmlFor="settings-reduce-motion" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
                 id="settings-reduce-motion"
+                data-testid="settings-reduce-motion"
                 type="checkbox" 
                 checked={reduceMotion}
                 onChange={(e) => setReduceMotion(e.target.checked)}
@@ -244,6 +252,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             <label htmlFor="settings-notify-habits" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
                 id="settings-notify-habits"
+                data-testid="settings-notify-habits"
                 type="checkbox" 
                 checked={notifyHabits}
                 onChange={(e) => setNotifyHabits(e.target.checked)}
@@ -257,6 +266,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             <label htmlFor="settings-notify-digest" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
                 id="settings-notify-digest"
+                data-testid="settings-notify-digest"
                 type="checkbox" 
                 checked={notifyDigest}
                 onChange={(e) => setNotifyDigest(e.target.checked)}
@@ -270,6 +280,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             <label htmlFor="settings-notify-achievements" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
                 id="settings-notify-achievements"
+                data-testid="settings-notify-achievements"
                 type="checkbox" 
                 checked={notifyAchievements}
                 onChange={(e) => setNotifyAchievements(e.target.checked)}
@@ -284,10 +295,24 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
 
         {/* Save Options Bar */}
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <button type="button" className="btn btn-secondary" onClick={handleExportData} aria-label="Export profile data as JSON">
+          <button 
+            id="settings-export-btn"
+            data-testid="settings-export-btn"
+            type="button" 
+            className="btn btn-secondary" 
+            onClick={handleExportData} 
+            aria-label="Export profile data as JSON"
+          >
             <Download size={16} aria-hidden="true" /> Export Profile Data (JSON)
           </button>
-          <button type="button" className="btn btn-primary" onClick={handleSave} aria-label="Save configurations">
+          <button 
+            id="settings-save-btn"
+            data-testid="settings-save-btn"
+            type="button" 
+            className="btn btn-primary" 
+            onClick={handleSave} 
+            aria-label="Save configurations"
+          >
             {saved ? (
               <>
                 Configurations Saved <Check size={16} aria-hidden="true" />
@@ -311,6 +336,8 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
 
           {!showConfirm ? (
             <button 
+              id="settings-reset-btn"
+              data-testid="settings-reset-btn"
               type="button" 
               className="btn" 
               style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', border: '1px solid var(--danger)' }}
@@ -326,6 +353,8 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               </span>
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button 
+                  id="settings-reset-cancel-btn"
+                  data-testid="settings-reset-cancel-btn"
                   type="button" 
                   className="btn btn-secondary" 
                   onClick={() => setShowConfirm(false)}
@@ -333,6 +362,8 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
                   Cancel
                 </button>
                 <button 
+                  id="settings-reset-confirm-btn"
+                  data-testid="settings-reset-confirm-btn"
                   type="button" 
                   className="btn" 
                   style={{ background: 'var(--danger)', color: '#ffffff', border: 'none' }}

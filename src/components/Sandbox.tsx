@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Trees, RefreshCw, Check, Info 
 } from 'lucide-react';
@@ -13,6 +13,24 @@ interface SandboxProps {
 export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }) => {
   const currentData = profile.currentData;
 
+  const fallbackData: CarbonData = {
+    commuteMode: 'transit',
+    weeklyCommuteKm: 50,
+    yearlyFlights: 1,
+    yearlyLongFlights: 0,
+    electricitySource: 'grid_mixed',
+    monthlyElectricBill: 50,
+    heatingFuel: 'natural_gas',
+    homeSizeSqM: 80,
+    dietType: 'moderate_meat',
+    foodWasteLevel: 'medium',
+    recyclingHabits: 'some',
+    shoppingFrequency: 'average'
+  };
+
+  // Create temporary sandbox data state initialized with current profile data
+  const [sandboxData, setSandboxData] = useState<CarbonData>(currentData || fallbackData);
+
   if (!currentData) {
     return (
       <div className="glass-card text-center" style={{ padding: '40px' }}>
@@ -20,14 +38,6 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
       </div>
     );
   }
-
-  // Create temporary sandbox data state initialized with current profile data
-  const [sandboxData, setSandboxData] = useState<CarbonData>({ ...currentData });
-
-  // Update local state when profile changes
-  useEffect(() => {
-    setSandboxData({ ...currentData });
-  }, [currentData]);
 
   const currentBreakdown = calculateCarbonFootprint(currentData);
   const { newBreakdown, savedTonnes, treesEquivalent } = calculateSavings(
@@ -62,10 +72,19 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
         </div>
         
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button type="button" className="btn btn-secondary" onClick={handleReset} aria-label="Reset sliders">
+          <button 
+            id="sandbox-reset-btn"
+            data-testid="sandbox-reset-btn"
+            type="button" 
+            className="btn btn-secondary" 
+            onClick={handleReset} 
+            aria-label="Reset sliders"
+          >
             <RefreshCw size={16} aria-hidden="true" /> Reset Sliders
           </button>
           <button 
+            id="sandbox-apply-btn"
+            data-testid="sandbox-apply-btn"
             type="button" 
             className="btn btn-primary" 
             onClick={handleApply}
@@ -90,6 +109,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
             </div>
             <input 
               id="sandbox-commute"
+              data-testid="sandbox-commute-slider"
               type="range"
               min="0"
               max="1000"
@@ -112,10 +132,12 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
               ].map(opt => (
                 <button
                   key={opt.id}
+                  id={`sandbox-commute-${opt.id}`}
+                  data-testid={`sandbox-commute-${opt.id}`}
                   type="button"
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.commuteMode === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('commuteMode', opt.id as any)}
+                  onClick={() => handleSelect('commuteMode', opt.id as CarbonData['commuteMode'])}
                   aria-pressed={sandboxData.commuteMode === opt.id}
                 >
                   {opt.label}
@@ -135,10 +157,12 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
               ].map(opt => (
                 <button
                   key={opt.id}
+                  id={`sandbox-electricity-${opt.id}`}
+                  data-testid={`sandbox-electricity-${opt.id}`}
                   type="button"
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.electricitySource === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('electricitySource', opt.id as any)}
+                  onClick={() => handleSelect('electricitySource', opt.id as CarbonData['electricitySource'])}
                   aria-pressed={sandboxData.electricitySource === opt.id}
                 >
                   {opt.label}
@@ -159,10 +183,12 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
               ].map(opt => (
                 <button
                   key={opt.id}
+                  id={`sandbox-diet-${opt.id}`}
+                  data-testid={`sandbox-diet-${opt.id}`}
                   type="button"
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.dietType === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('dietType', opt.id as any)}
+                  onClick={() => handleSelect('dietType', opt.id as CarbonData['dietType'])}
                   aria-pressed={sandboxData.dietType === opt.id}
                 >
                   {opt.label}

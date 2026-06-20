@@ -61,6 +61,8 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
               >
                 <div className="habit-left">
                   <button 
+                    id={`habit-checkbox-${habit.id}`}
+                    data-testid={`habit-checkbox-${habit.id}`}
                     type="button" 
                     className="habit-checkbox"
                     onClick={() => onToggleHabit(habit.id)}

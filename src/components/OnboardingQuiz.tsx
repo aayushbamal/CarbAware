@@ -65,6 +65,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label className="number-input-label mb-4" style={{ display: 'block' }}>Primary Commute Mode</label>
             <div className="options-grid">
               <button 
+                id="commute-petrol-car"
+                data-testid="commute-petrol-car"
                 type="button"
                 className={`option-card ${formData.commuteMode === 'car_petrol' ? 'selected' : ''}`}
                 onClick={() => handleSelect('commuteMode', 'car_petrol')}
@@ -78,6 +80,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="commute-diesel-car"
+                data-testid="commute-diesel-car"
                 type="button"
                 className={`option-card ${formData.commuteMode === 'car_diesel' ? 'selected' : ''}`}
                 onClick={() => handleSelect('commuteMode', 'car_diesel')}
@@ -91,6 +95,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="commute-electric-car"
+                data-testid="commute-electric-car"
                 type="button"
                 className={`option-card ${formData.commuteMode === 'car_electric' ? 'selected' : ''}`}
                 onClick={() => handleSelect('commuteMode', 'car_electric')}
@@ -104,6 +110,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="commute-transit"
+                data-testid="commute-transit"
                 type="button"
                 className={`option-card ${formData.commuteMode === 'transit' ? 'selected' : ''}`}
                 onClick={() => handleSelect('commuteMode', 'transit')}
@@ -117,6 +125,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="commute-active"
+                data-testid="commute-active"
                 type="button"
                 className={`option-card ${formData.commuteMode === 'bicycle_walk' ? 'selected' : ''}`}
                 style={{ gridColumn: 'span 2' }}
@@ -136,6 +146,7 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label htmlFor="quiz-weekly-commute" className="number-input-label">Weekly Commute Distance (Kilometers)</label>
             <input 
               id="quiz-weekly-commute"
+              data-testid="quiz-weekly-commute"
               type="number" 
               className="styled-input"
               value={formData.weeklyCommuteKm}
@@ -150,6 +161,7 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-short-flights" className="number-input-label">Short flights per year (&lt; 3 hrs)</label>
               <input 
                 id="quiz-short-flights"
+                data-testid="quiz-short-flights"
                 type="number" 
                 className="styled-input"
                 value={formData.yearlyFlights}
@@ -161,6 +173,7 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-long-flights" className="number-input-label">Long flights per year (&gt; 3 hrs)</label>
               <input 
                 id="quiz-long-flights"
+                data-testid="quiz-long-flights"
                 type="number" 
                 className="styled-input"
                 value={formData.yearlyLongFlights}
@@ -181,6 +194,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label className="number-input-label mb-4" style={{ display: 'block' }}>Primary Electricity Source</label>
             <div className="options-grid">
               <button 
+                id="electricity-coal"
+                data-testid="electricity-coal"
                 type="button"
                 className={`option-card ${formData.electricitySource === 'grid_coal' ? 'selected' : ''}`}
                 onClick={() => handleSelect('electricitySource', 'grid_coal')}
@@ -194,6 +209,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="electricity-mixed"
+                data-testid="electricity-mixed"
                 type="button"
                 className={`option-card ${formData.electricitySource === 'grid_mixed' ? 'selected' : ''}`}
                 onClick={() => handleSelect('electricitySource', 'grid_mixed')}
@@ -207,6 +224,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="electricity-renewable"
+                data-testid="electricity-renewable"
                 type="button"
                 className={`option-card ${formData.electricitySource === 'solar_renewable' ? 'selected' : ''}`}
                 style={{ gridColumn: 'span 2' }}
@@ -226,6 +245,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label className="number-input-label mb-4" style={{ display: 'block' }}>Primary Heating Fuel</label>
             <div className="options-grid">
               <button 
+                id="heating-gas"
+                data-testid="heating-gas"
                 type="button"
                 className={`option-card ${formData.heatingFuel === 'natural_gas' ? 'selected' : ''}`}
                 onClick={() => handleSelect('heatingFuel', 'natural_gas')}
@@ -236,6 +257,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="heating-electric"
+                data-testid="heating-electric"
                 type="button"
                 className={`option-card ${formData.heatingFuel === 'electricity' ? 'selected' : ''}`}
                 onClick={() => handleSelect('heatingFuel', 'electricity')}
@@ -246,6 +269,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="heating-oil"
+                data-testid="heating-oil"
                 type="button"
                 className={`option-card ${formData.heatingFuel === 'heating_oil' ? 'selected' : ''}`}
                 onClick={() => handleSelect('heatingFuel', 'heating_oil')}
@@ -256,6 +281,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="heating-wood"
+                data-testid="heating-wood"
                 type="button"
                 className={`option-card ${formData.heatingFuel === 'wood' ? 'selected' : ''}`}
                 onClick={() => handleSelect('heatingFuel', 'wood')}
@@ -272,6 +299,7 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-electric-bill" className="number-input-label">Monthly Electric Bill ($ equivalent)</label>
               <input 
                 id="quiz-electric-bill"
+                data-testid="quiz-electric-bill"
                 type="number" 
                 className="styled-input"
                 value={formData.monthlyElectricBill}
@@ -283,6 +311,7 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-home-size" className="number-input-label">Home Size (Square Meters)</label>
               <input 
                 id="quiz-home-size"
+                data-testid="quiz-home-size"
                 type="number" 
                 className="styled-input"
                 value={formData.homeSizeSqM}
@@ -303,6 +332,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label className="number-input-label mb-4" style={{ display: 'block' }}>Diet Profile</label>
             <div className="options-grid">
               <button 
+                id="diet-heavy-meat"
+                data-testid="diet-heavy-meat"
                 type="button"
                 className={`option-card ${formData.dietType === 'heavy_meat' ? 'selected' : ''}`}
                 onClick={() => handleSelect('dietType', 'heavy_meat')}
@@ -313,6 +344,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="diet-moderate-meat"
+                data-testid="diet-moderate-meat"
                 type="button"
                 className={`option-card ${formData.dietType === 'moderate_meat' ? 'selected' : ''}`}
                 onClick={() => handleSelect('dietType', 'moderate_meat')}
@@ -323,6 +356,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="diet-vegetarian"
+                data-testid="diet-vegetarian"
                 type="button"
                 className={`option-card ${formData.dietType === 'vegetarian' ? 'selected' : ''}`}
                 onClick={() => handleSelect('dietType', 'vegetarian')}
@@ -333,6 +368,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="diet-vegan"
+                data-testid="diet-vegan"
                 type="button"
                 className={`option-card ${formData.dietType === 'vegan' ? 'selected' : ''}`}
                 onClick={() => handleSelect('dietType', 'vegan')}
@@ -349,9 +386,10 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-food-waste" className="settings-label">Household Food Waste</label>
               <select 
                 id="quiz-food-waste"
+                data-testid="quiz-food-waste"
                 className="settings-select"
                 value={formData.foodWasteLevel}
-                onChange={(e) => handleSelect('foodWasteLevel', e.target.value as any)}
+                onChange={(e) => handleSelect('foodWasteLevel', e.target.value as CarbonData['foodWasteLevel'])}
               >
                 <option value="low">Minimal - we finish everything</option>
                 <option value="medium">Average - compost / some discards</option>
@@ -363,9 +401,10 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               <label htmlFor="quiz-recycling" className="settings-label">Recycling Practices</label>
               <select 
                 id="quiz-recycling"
+                data-testid="quiz-recycling"
                 className="settings-select"
                 value={formData.recyclingHabits}
-                onChange={(e) => handleSelect('recyclingHabits', e.target.value as any)}
+                onChange={(e) => handleSelect('recyclingHabits', e.target.value as CarbonData['recyclingHabits'])}
               >
                 <option value="all">Sort everything (cans, plastic, paper)</option>
                 <option value="some">Recycle sometimes</option>
@@ -378,6 +417,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
             <label className="number-input-label mb-4" style={{ display: 'block' }}>Consumer Shopping Habit</label>
             <div className="options-grid">
               <button 
+                id="shopping-rarely"
+                data-testid="shopping-rarely"
                 type="button"
                 className={`option-card ${formData.shoppingFrequency === 'rarely' ? 'selected' : ''}`}
                 onClick={() => handleSelect('shoppingFrequency', 'rarely')}
@@ -391,6 +432,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="shopping-average"
+                data-testid="shopping-average"
                 type="button"
                 className={`option-card ${formData.shoppingFrequency === 'average' ? 'selected' : ''}`}
                 onClick={() => handleSelect('shoppingFrequency', 'average')}
@@ -404,6 +447,8 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
               </button>
 
               <button 
+                id="shopping-frequently"
+                data-testid="shopping-frequently"
                 type="button"
                 className={`option-card ${formData.shoppingFrequency === 'frequently' ? 'selected' : ''}`}
                 style={{ gridColumn: 'span 2' }}
@@ -449,7 +494,13 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
 
       <div className="navigation-buttons" style={{ marginTop: '24px' }}>
         {step > 1 ? (
-          <button type="button" className="btn btn-secondary" onClick={prevStep}>
+          <button 
+            id="quiz-back-btn"
+            data-testid="quiz-back-btn"
+            type="button" 
+            className="btn btn-secondary" 
+            onClick={prevStep}
+          >
             <ArrowLeft size={16} aria-hidden="true" /> Back
           </button>
         ) : (
@@ -457,11 +508,23 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
         )}
 
         {step < 3 ? (
-          <button type="button" className="btn btn-primary" onClick={nextStep}>
+          <button 
+            id="quiz-next-btn"
+            data-testid="quiz-next-btn"
+            type="button" 
+            className="btn btn-primary" 
+            onClick={nextStep}
+          >
             Next <ArrowRight size={16} aria-hidden="true" />
           </button>
         ) : (
-          <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+          <button 
+            id="quiz-submit-btn"
+            data-testid="quiz-submit-btn"
+            type="button" 
+            className="btn btn-primary" 
+            onClick={handleSubmit}
+          >
             Generate Profile <Check size={16} aria-hidden="true" />
           </button>
         )}

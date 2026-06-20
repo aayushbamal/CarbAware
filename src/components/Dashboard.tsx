@@ -202,7 +202,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
           <div style={{ textAlign: 'left' }}>
             <h3 style={{ marginBottom: '6px' }}>Form Daily Habits</h3>
             <p className="info-text mb-4">Complete daily check-in actions to earn XP, maintain streaks, and actively offset your footprint.</p>
-            <button className="btn btn-primary" onClick={onNavigateToHabits}>
+            <button 
+              id="dash-habits-btn"
+              data-testid="dash-habits-btn"
+              className="btn btn-primary" 
+              onClick={onNavigateToHabits}
+            >
               Track Habits Now
             </button>
           </div>

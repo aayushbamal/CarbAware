@@ -142,6 +142,8 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
                 </div>
 
                 <button 
+                  id={`marketplace-buy-btn-${item.id}`}
+                  data-testid={`marketplace-buy-btn-${item.id}`}
                   type="button" 
                   className="btn btn-secondary" 
                   style={{ width: '100%', justifyContent: 'center', cursor: 'not-allowed', opacity: 0.6 }}

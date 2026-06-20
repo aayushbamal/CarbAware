@@ -6,7 +6,7 @@ import type { UserProfile } from '../types';
  */
 export const runAchievementScans = (user: UserProfile): UserProfile => {
   const today = new Date().toLocaleDateString();
-  let madeChanges = false;
+  let newlyUnlockedCount = 0;
 
   const scannedAchievements = user.achievements.map(ach => {
     if (ach.unlocked) return ach; // keep unlocked ones
@@ -36,17 +36,17 @@ export const runAchievementScans = (user: UserProfile): UserProfile => {
     }
 
     if (triggerUnlock) {
-      madeChanges = true;
+      newlyUnlockedCount++;
       return { ...ach, unlocked: true, unlockedAt: today };
     }
     return ach;
   });
 
-  if (madeChanges) {
+  if (newlyUnlockedCount > 0) {
     return {
       ...user,
       achievements: scannedAchievements,
-      totalPoints: user.totalPoints + 20 // award bonus points for achievement unlocks!
+      totalPoints: user.totalPoints + (newlyUnlockedCount * 20) // award bonus points for each achievement unlock!
     };
   }
   return { ...user, achievements: scannedAchievements };

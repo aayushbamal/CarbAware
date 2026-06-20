@@ -67,7 +67,9 @@ export const Ecodroid: React.FC<EcodroidProps> = ({ profile }) => {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     resetChat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile.settings?.assistantPersona, profile.name]);
 
   useEffect(() => {
@@ -92,16 +94,17 @@ export const Ecodroid: React.FC<EcodroidProps> = ({ profile }) => {
     const electricityInfo = data ? `${data.electricitySource.replace('_', ' ')}` : 'Mixed Grid';
     const dietInfo = data ? `${data.dietType}` : 'balanced';
 
-    let personaDirective = '';
-    if (persona === 'strict') {
-      personaDirective = 'You are strict, scientific, no-nonsense, and direct. Emphasize urgent environmental limits, avoid sweet-talking, and give raw numbers and rigid rules.';
-    } else if (persona === 'optimist') {
-      personaDirective = 'You are highly positive, cheerful, encouraging, and focus on the hopeful aspects of green lifestyle changes. Use words of encouragement and positive reinforcement.';
-    } else if (persona === 'general') {
-      personaDirective = 'Adopt a military tactical commander style. Use terminology like "operation", "tactical target", "deployment", "combat emissions". Keep instructions precise and action-oriented.';
-    } else {
-      personaDirective = 'Be a friendly, helpful, and rational environmental coach. Keep explanations practical, accessible, and balanced.';
-    }
+    const personaDirective = (() => {
+      if (persona === 'strict') {
+        return 'You are strict, scientific, no-nonsense, and direct. Emphasize urgent environmental limits, avoid sweet-talking, and give raw numbers and rigid rules.';
+      } else if (persona === 'optimist') {
+        return 'You are highly positive, cheerful, encouraging, and focus on the hopeful aspects of green lifestyle changes. Use words of encouragement and positive reinforcement.';
+      } else if (persona === 'general') {
+        return 'Adopt a military tactical commander style. Use terminology like "operation", "tactical target", "deployment", "combat emissions". Keep instructions precise and action-oriented.';
+      } else {
+        return 'Be a friendly, helpful, and rational environmental coach. Keep explanations practical, accessible, and balanced.';
+      }
+    })();
 
     const systemPrompt = `You are Ecodroid, a helpful futuristic eco-assistant droid for the CarbAware web app.
 The user is ${profile.name || 'Eco Champion'}.
@@ -185,9 +188,10 @@ Guidelines:
           timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
-    } catch (err: any) {
-      console.error(err);
-      setApiError(err.message || 'An error occurred while communicating with Ecodroid.');
+    } catch (err) {
+      const error = err as Error;
+      console.error(error);
+      setApiError(error.message || 'An error occurred while communicating with Ecodroid.');
       setMessages(prev => [
         ...prev,
         {
@@ -217,7 +221,14 @@ Guidelines:
           </p>
         </div>
 
-        <button type="button" className="btn btn-secondary" onClick={resetChat} aria-label="Clear chat history">
+        <button 
+          id="chat-reset-btn"
+          data-testid="chat-reset-btn"
+          type="button" 
+          className="btn btn-secondary" 
+          onClick={resetChat} 
+          aria-label="Clear chat history"
+        >
           <RefreshCw size={14} aria-hidden="true" /> Clear Chat
         </button>
       </div>
@@ -363,6 +374,7 @@ Guidelines:
           >
             <input
               id="chat-input"
+              data-testid="chat-input"
               type="text"
               className="styled-input"
               style={{ flexGrow: 1, height: '44px', fontSize: '14px', paddingLeft: '16px' }}
@@ -373,6 +385,8 @@ Guidelines:
               disabled={isLoading}
             />
             <button 
+              id="chat-send-btn"
+              data-testid="chat-send-btn"
               type="submit" 
               className="btn btn-primary"
               style={{ height: '44px', width: '44px', padding: 0, justifyContent: 'center' }}
@@ -406,6 +420,8 @@ Guidelines:
               {suggestionChips.map((chip, idx) => (
                 <button
                   key={idx}
+                  id={`chat-suggest-${idx}`}
+                  data-testid={`chat-suggest-${idx}`}
                   type="button"
                   className="option-card"
                   style={{ 
