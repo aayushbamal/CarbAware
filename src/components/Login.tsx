@@ -98,12 +98,34 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
       <div className="login-card glass-card">
         {/* Logo Section */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px', textAlign: 'center' }}>
-          <div style={{ background: 'var(--primary-glow)', padding: '16px', borderRadius: '50%', color: 'var(--primary)', marginBottom: '12px' }}>
+          <div style={{ 
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 182, 212, 0.15))', 
+            padding: '16px', 
+            borderRadius: '50%', 
+            color: 'var(--primary)', 
+            marginBottom: '16px',
+            border: '1px solid rgba(16, 185, 129, 0.25)',
+            boxShadow: '0 0 24px rgba(16, 185, 129, 0.18)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
             <Shield size={36} />
           </div>
-          <h2 style={{ fontSize: '28px', fontWeight: 800 }}>CarbAware & PromptWars</h2>
-          <p style={{ color: 'var(--text-sub)', fontSize: '14px', marginTop: '4px' }}>
-            Calculate footprints, track green actions, and battle climate skeptics.
+          <h2 style={{ 
+            fontSize: '32px', 
+            fontWeight: 800, 
+            fontFamily: 'var(--font-display)', 
+            letterSpacing: '-0.03em', 
+            background: 'linear-gradient(120deg, #ffffff 40%, var(--accent) 100%)', 
+            WebkitBackgroundClip: 'text', 
+            WebkitTextFillColor: 'transparent', 
+            marginBottom: '6px' 
+          }}>
+            CarbAware
+          </h2>
+          <p style={{ color: 'var(--text-sub)', fontSize: '14px', maxWidth: '340px', lineHeight: 1.4 }}>
+            Calculate footprints, track green actions, and consult Ecodroid AI.
           </p>
         </div>
 
