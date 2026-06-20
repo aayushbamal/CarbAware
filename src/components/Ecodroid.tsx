@@ -15,9 +15,10 @@ export const Ecodroid: React.FC<EcodroidProps> = ({ profile }) => {
   const [apiError, setApiError] = useState<string | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const apiKey = GEMINI_API_KEY;
-  const isNvidiaActive = !!NVIDIA_API_KEY;
-  const isGeminiActive = !!apiKey;
+  const nvidiaKey = profile.settings?.nvidiaApiKey || NVIDIA_API_KEY;
+  const geminiKey = profile.settings?.geminiApiKey || GEMINI_API_KEY;
+  const isNvidiaActive = !!nvidiaKey;
+  const isGeminiActive = !!geminiKey;
   const isAiActive = isNvidiaActive || isGeminiActive;
 
   // Calculate user footprint metrics for Ecodroid's context
@@ -133,7 +134,7 @@ Guidelines:
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${NVIDIA_API_KEY}`
+        'Authorization': `Bearer ${nvidiaKey}`
       },
       body: JSON.stringify({
         messages: [

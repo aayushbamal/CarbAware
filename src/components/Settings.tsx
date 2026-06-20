@@ -25,6 +25,8 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
   const [notifyHabits, setNotifyHabits] = useState<boolean>(profile.settings?.notifyHabits || true);
   const [notifyDigest, setNotifyDigest] = useState<boolean>(profile.settings?.notifyDigest || true);
   const [notifyAchievements, setNotifyAchievements] = useState<boolean>(profile.settings?.notifyAchievements || true);
+  const [nvidiaApiKey, setNvidiaApiKey] = useState<string>(profile.settings?.nvidiaApiKey || '');
+  const [geminiApiKey, setGeminiApiKey] = useState<string>(profile.settings?.geminiApiKey || '');
 
   const [showConfirm, setShowConfirm] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -42,7 +44,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         panelOpacity,
         notifyHabits,
         notifyDigest,
-        notifyAchievements
+        notifyAchievements,
+        nvidiaApiKey,
+        geminiApiKey
       }
     });
     setSaved(true);
@@ -155,6 +159,39 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
                   onChange={(e) => setTemperature(parseFloat(e.target.value))}
                 />
                 <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Creative</span>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '20px' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--primary)', marginBottom: '12px' }}>AI API Keys Configuration (Optional override)</h4>
+            <div className="grid-2" style={{ gap: '20px' }}>
+              <div className="settings-group">
+                <label htmlFor="settings-nvidia-key" className="settings-label">NVIDIA NIM API Key</label>
+                <input 
+                  id="settings-nvidia-key"
+                  data-testid="settings-nvidia-key"
+                  type="password" 
+                  className="styled-input" 
+                  style={{ width: '100%', height: '40px', paddingLeft: '14px' }}
+                  placeholder="nvapi-..."
+                  value={nvidiaApiKey}
+                  onChange={(e) => setNvidiaApiKey(e.target.value)}
+                />
+              </div>
+
+              <div className="settings-group">
+                <label htmlFor="settings-gemini-key" className="settings-label">Gemini Developer API Key</label>
+                <input 
+                  id="settings-gemini-key"
+                  data-testid="settings-gemini-key"
+                  type="password" 
+                  className="styled-input" 
+                  style={{ width: '100%', height: '40px', paddingLeft: '14px' }}
+                  placeholder="AIzaSy..."
+                  value={geminiApiKey}
+                  onChange={(e) => setGeminiApiKey(e.target.value)}
+                />
               </div>
             </div>
           </div>

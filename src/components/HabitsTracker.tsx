@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Check, Flame, Award, Lock
 } from 'lucide-react';
@@ -7,10 +7,28 @@ import type { UserProfile } from '../types';
 interface HabitsTrackerProps {
   profile: UserProfile;
   onToggleHabit: (habitId: string) => void;
+  onAddHabit: (name: string, category: 'transport' | 'energy' | 'diet' | 'waste', co2SavedKg: number, points: number) => void;
 }
 
-export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleHabit }) => {
+export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleHabit, onAddHabit }) => {
   const { habits, achievements, totalPoints, streakCount } = profile;
+
+  const [customName, setCustomName] = useState('');
+  const [customCategory, setCustomCategory] = useState<'transport' | 'energy' | 'diet' | 'waste'>('energy');
+  const [customCo2, setCustomCo2] = useState<number>(1.5);
+  const [customPoints, setCustomPoints] = useState<number>(10);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!customName.trim()) return;
+    onAddHabit(
+      customName.trim(),
+      customCategory,
+      Math.max(0, Number(Number(customCo2).toFixed(1))),
+      Math.max(0, Math.round(customPoints))
+    );
+    setCustomName('');
+  };
 
   const co2SavedToday = habits
     .filter(h => h.completed)
@@ -89,6 +107,86 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
                 )}
               </div>
             ))}
+          </div>
+
+          {/* Custom Action Creator Form */}
+          <div style={{ marginTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
+            <h4 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--primary)', marginBottom: '12px' }}>Create Custom Action</h4>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <div className="grid-2" style={{ gap: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label htmlFor="custom-habit-name" style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Action Title</label>
+                  <input
+                    id="custom-habit-name"
+                    data-testid="custom-habit-name"
+                    type="text"
+                    className="styled-input"
+                    placeholder="e.g. Unplug unused charger"
+                    value={customName}
+                    onChange={(e) => setCustomName(e.target.value)}
+                    style={{ height: '36px', fontSize: '13px', paddingLeft: '10px' }}
+                    required
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label htmlFor="custom-habit-category" style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Category</label>
+                  <select
+                    id="custom-habit-category"
+                    data-testid="custom-habit-category"
+                    className="settings-select"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value as 'transport' | 'energy' | 'diet' | 'waste')}
+                    style={{ height: '36px', fontSize: '13px', padding: '0 8px' }}
+                  >
+                    <option value="energy">Home Energy 💡</option>
+                    <option value="transport">Transportation 🚗</option>
+                    <option value="diet">Diet & Meals 🥗</option>
+                    <option value="waste">Waste & Recycling ♻️</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid-2" style={{ gap: '10px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label htmlFor="custom-habit-co2" style={{ fontSize: '11px', color: 'var(--text-sub)' }}>CO₂ Savings (kg)</label>
+                  <input
+                    id="custom-habit-co2"
+                    data-testid="custom-habit-co2"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    className="styled-input"
+                    value={customCo2}
+                    onChange={(e) => setCustomCo2(parseFloat(e.target.value) || 0)}
+                    style={{ height: '36px', fontSize: '13px', paddingLeft: '10px' }}
+                  />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <label htmlFor="custom-habit-points" style={{ fontSize: '11px', color: 'var(--text-sub)' }}>XP Award</label>
+                  <input
+                    id="custom-habit-points"
+                    data-testid="custom-habit-points"
+                    type="number"
+                    min="1"
+                    className="styled-input"
+                    value={customPoints}
+                    onChange={(e) => setCustomPoints(parseInt(e.target.value) || 0)}
+                    style={{ height: '36px', fontSize: '13px', paddingLeft: '10px' }}
+                  />
+                </div>
+              </div>
+
+              <button
+                id="custom-habit-add-btn"
+                data-testid="custom-habit-add-btn"
+                type="submit"
+                className="btn btn-primary"
+                style={{ alignSelf: 'flex-start', padding: '6px 12px', fontSize: '12px', marginTop: '4px', justifyContent: 'center' }}
+                disabled={!customName.trim()}
+              >
+                Add Action Checkbox
+              </button>
+            </form>
           </div>
         </div>
 

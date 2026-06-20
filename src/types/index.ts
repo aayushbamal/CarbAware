@@ -59,6 +59,8 @@ export interface AppSettings {
   notifyHabits: boolean;
   notifyDigest: boolean;
   notifyAchievements: boolean;
+  nvidiaApiKey?: string;
+  geminiApiKey?: string;
 }
 
 export interface UserProfile {

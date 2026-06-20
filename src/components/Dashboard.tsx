@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   Award, Zap, Car, Utensils, ShoppingBag, 
-  Flame, TrendingDown, Target, Info 
+  Flame, TrendingDown, Target, Info, Globe
 } from 'lucide-react';
 import type { UserProfile } from '../types';
 import { CARBON_AVERAGES, calculateCarbonFootprint } from '../utils/carbonCalculator';
@@ -9,9 +9,10 @@ import { CARBON_AVERAGES, calculateCarbonFootprint } from '../utils/carbonCalcul
 interface DashboardProps {
   profile: UserProfile;
   onNavigateToHabits: () => void;
+  onUpdateOffset: (newOffset: number) => void;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabits }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabits, onUpdateOffset }) => {
   const currentData = profile.currentData;
 
   if (!currentData) {
@@ -194,43 +195,105 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
       </div>
 
       {/* Action Prompt Call-to-Action & Quick Habits Summary */}
-      <div className="grid-2">
-        <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-          <div style={{ background: 'var(--primary-glow)', padding: '16px', borderRadius: '50%', color: 'var(--primary)' }}>
-            <Zap size={32} aria-hidden="true" />
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginTop: '24px' }}>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <div style={{ background: 'var(--primary-glow)', padding: '12px', borderRadius: '50%', color: 'var(--primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Zap size={24} aria-hidden="true" />
+            </div>
+            <div style={{ textAlign: 'left' }}>
+              <h3 style={{ margin: 0, fontSize: '16px' }}>Form Daily Habits</h3>
+              <p className="info-text" style={{ fontSize: '12px', margin: '4px 0 0 0' }}>Log daily actions to earn XP and build streaks.</p>
+            </div>
           </div>
-          <div style={{ textAlign: 'left' }}>
-            <h3 style={{ marginBottom: '6px' }}>Form Daily Habits</h3>
-            <p className="info-text mb-4">Complete daily check-in actions to earn XP, maintain streaks, and actively offset your footprint.</p>
+          <button 
+            id="dash-habits-btn"
+            data-testid="dash-habits-btn"
+            className="btn btn-primary" 
+            style={{ width: '100%', padding: '10px 14px', fontSize: '13px' }}
+            onClick={onNavigateToHabits}
+          >
+            Track Habits Now
+          </button>
+        </div>
+
+        {/* Carbon Offset Simulator */}
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Globe size={18} style={{ color: 'var(--primary)' }} aria-hidden="true" />
+            <h3 style={{ margin: 0, fontSize: '16px' }}>Carbon Offset Simulator</h3>
+          </div>
+          <p className="info-text" style={{ fontSize: '12px', margin: 0 }}>
+            Simulate purchasing carbon offsets (tonnes CO₂e) to bring your net emissions down to **Net Zero**.
+          </p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
             <button 
-              id="dash-habits-btn"
-              data-testid="dash-habits-btn"
-              className="btn btn-primary" 
-              onClick={onNavigateToHabits}
+              id="offset-add-01"
+              data-testid="offset-add-01"
+              type="button" 
+              className="btn btn-secondary" 
+              style={{ padding: '6px 10px', fontSize: '11px' }}
+              onClick={() => onUpdateOffset(offset + 0.1)}
+              aria-label="Add 0.1 tonnes of carbon offset"
             >
-              Track Habits Now
+              +0.1t
+            </button>
+            <button 
+              id="offset-add-05"
+              data-testid="offset-add-05"
+              type="button" 
+              className="btn btn-secondary" 
+              style={{ padding: '6px 10px', fontSize: '11px' }}
+              onClick={() => onUpdateOffset(offset + 0.5)}
+              aria-label="Add 0.5 tonnes of carbon offset"
+            >
+              +0.5t
+            </button>
+            <button 
+              id="offset-add-10"
+              data-testid="offset-add-10"
+              type="button" 
+              className="btn btn-secondary" 
+              style={{ padding: '6px 10px', fontSize: '11px' }}
+              onClick={() => onUpdateOffset(offset + 1.0)}
+              aria-label="Add 1.0 tonnes of carbon offset"
+            >
+              +1.0t
+            </button>
+            <button 
+              id="offset-reset"
+              data-testid="offset-reset"
+              type="button" 
+              className="btn" 
+              style={{ padding: '6px 10px', fontSize: '11px', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', border: '1px solid var(--danger)' }}
+              onClick={() => onUpdateOffset(0)}
+              disabled={offset === 0}
+              aria-label="Reset simulated offsets"
+            >
+              Reset
             </button>
           </div>
         </div>
 
-        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Info size={16} style={{ color: 'var(--secondary)' }} aria-hidden="true" />
-            <h3>Your Emissions Footprint Profile</h3>
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <Info size={16} style={{ color: 'var(--secondary)' }} aria-hidden="true" />
+              <h3 style={{ margin: 0, fontSize: '16px' }}>Emissions Profile</h3>
+            </div>
+            <div style={{ fontSize: '12px', color: 'var(--text-sub)' }}>
+              <p style={{ margin: '0 0 6px 0' }}>
+                Your largest contributor is <strong>
+                  {breakdown.transport >= Math.max(breakdown.homeEnergy, breakdown.diet, breakdown.wasteShopping) ? 'Transportation' :
+                   breakdown.homeEnergy >= Math.max(breakdown.transport, breakdown.diet, breakdown.wasteShopping) ? 'Home Energy' :
+                   breakdown.diet >= Math.max(breakdown.transport, breakdown.homeEnergy, breakdown.wasteShopping) ? 'Diet' : 'Waste & Shopping'}
+                </strong> ({(Math.max(breakdown.transport, breakdown.homeEnergy, breakdown.diet, breakdown.wasteShopping) / (breakdown.total || 1) * 100).toFixed(0)}%).
+              </p>
+            </div>
           </div>
-          <div style={{ fontSize: '13px', color: 'var(--text-sub)' }}>
-            <p className="mb-4">
-              Your largest carbon contributor is <strong>
-                {breakdown.transport >= Math.max(breakdown.homeEnergy, breakdown.diet, breakdown.wasteShopping) ? 'Transportation' :
-                 breakdown.homeEnergy >= Math.max(breakdown.transport, breakdown.diet, breakdown.wasteShopping) ? 'Home Energy' :
-                 breakdown.diet >= Math.max(breakdown.transport, breakdown.homeEnergy, breakdown.wasteShopping) ? 'Diet' : 'Waste & Shopping'}
-              </strong>, representing 
-              {' '}{(Math.max(breakdown.transport, breakdown.homeEnergy, breakdown.diet, breakdown.wasteShopping) / (breakdown.total || 1) * 100).toFixed(0)}% of your total footprint.
-            </p>
-            <p>
-              Use the **What-If Sandbox** in the navigation bar to see how adjustments to your vehicle commute distance or fuel types can drastically scale down your footprint.
-            </p>
-          </div>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            Use the **Sandbox Sim** to simulate changes to your vehicle or home fuel options.
+          </span>
         </div>
       </div>
     </div>

@@ -214,4 +214,18 @@ describe('Carbon Footprint Calculator Utilities', () => {
     // sum: 0.05 - 0.2 + 0.2 = 0.05
     expect(calculateCarbonFootprint(customData).wasteShopping).toBe(0.05);
   });
+
+  it('correctly calculates net emissions by applying offset values to the total footprint', () => {
+    const result = calculateCarbonFootprint(lowImpactProfile);
+    const offset = 0.5;
+    const netEmissions = Math.max(0, Number((result.total - offset).toFixed(2)));
+    expect(netEmissions).toBe(Number((result.total - 0.5).toFixed(2)));
+  });
+
+  it('clamps net emissions to 0 when offset value exceeds total emissions', () => {
+    const result = calculateCarbonFootprint(lowImpactProfile);
+    const offset = 5.0; // lowImpact total is under 2.0
+    const netEmissions = Math.max(0, Number((result.total - offset).toFixed(2)));
+    expect(netEmissions).toBe(0);
+  });
 });

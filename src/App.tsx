@@ -47,7 +47,9 @@ const DEFAULT_SETTINGS: AppSettings = {
   panelOpacity: 0.12,
   notifyHabits: true,
   notifyDigest: true,
-  notifyAchievements: true
+  notifyAchievements: true,
+  nvidiaApiKey: '',
+  geminiApiKey: ''
 };
 
 const INITIAL_PROFILE: UserProfile = {
@@ -328,6 +330,39 @@ function App() {
     setActiveTab('dashboard');
   };
 
+  // 9. Add Custom Habit Handler
+  const handleAddHabit = (name: string, category: 'transport' | 'energy' | 'diet' | 'waste', co2SavedKg: number, points: number) => {
+    setProfile(prev => {
+      const updatedProfile = {
+        ...prev,
+        habits: [
+          ...prev.habits,
+          {
+            id: `h_custom_${Date.now()}`,
+            name,
+            category,
+            co2SavedKg,
+            points,
+            completed: false,
+            streak: 0
+          }
+        ]
+      };
+      return runAchievementScans(updatedProfile);
+    });
+  };
+
+  // 10. Update Carbon Offset Handler
+  const handleUpdateOffset = (newOffset: number) => {
+    setProfile(prev => {
+      const updatedProfile = {
+        ...prev,
+        offsetTonnes: Math.max(0, Number(newOffset.toFixed(2)))
+      };
+      return runAchievementScans(updatedProfile);
+    });
+  };
+
 
 
 
@@ -496,12 +531,14 @@ function App() {
               <Dashboard 
                 profile={profile} 
                 onNavigateToHabits={() => navigateToTab('habits')} 
+                onUpdateOffset={handleUpdateOffset}
               />
             )}
             {activeTab === 'habits' && (
               <HabitsTracker 
                 profile={profile} 
                 onToggleHabit={handleToggleHabit} 
+                onAddHabit={handleAddHabit}
               />
             )}
             {activeTab === 'sandbox' && (

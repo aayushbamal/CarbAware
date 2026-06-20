@@ -1247,3 +1247,14 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* Accessibility Focus Indicator */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--primary) !important;
+  outline-offset: 3px !important;
+  box-shadow: 0 0 0 4px var(--primary-glow) !important;
+}
+
