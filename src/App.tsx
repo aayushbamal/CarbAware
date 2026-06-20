@@ -14,6 +14,7 @@ import { Login } from './components/Login';
 import { Marketplace } from './components/Marketplace';
 import type { UserProfile, CarbonData, DailyHabit, Achievement, HistoricalCalculation, AppSettings } from './types';
 import { calculateCarbonFootprint } from './utils/carbonCalculator';
+import { runAchievementScans } from './utils/achievementEngine';
 import { supabase } from './utils/supabaseClient';
 import type { Session } from '@supabase/supabase-js';
 
@@ -342,54 +343,7 @@ function App() {
 
 
 
-  // 10. Achievements Scan Engine
-  const runAchievementScans = (user: UserProfile): UserProfile => {
-    const today = new Date().toLocaleDateString();
-    let madeChanges = false;
-
-    const scannedAchievements = user.achievements.map(ach => {
-      if (ach.unlocked) return ach; // keep unlocked ones
-
-      let triggerUnlock = false;
-
-      // Rule checks:
-      if (ach.id === 'ac2' && user.totalPoints >= 100) {
-        triggerUnlock = true;
-      }
-      if (ach.id === 'ac3' && user.currentData) {
-        const mode = user.currentData.commuteMode;
-        if (mode === 'bicycle_walk' || mode === 'transit' || mode === 'car_electric') {
-          triggerUnlock = true;
-        }
-      }
-      if (ach.id === 'ac4' && user.currentData) {
-        const diet = user.currentData.dietType;
-        if (diet === 'vegetarian' || diet === 'vegan') {
-          triggerUnlock = true;
-        }
-      }
-      if (ach.id === 'ac5' && user.currentData) {
-        if (user.currentData.electricitySource === 'solar_renewable') {
-          triggerUnlock = true;
-        }
-      }
-
-      if (triggerUnlock) {
-        madeChanges = true;
-        return { ...ach, unlocked: true, unlockedAt: today };
-      }
-      return ach;
-    });
-
-    if (madeChanges) {
-      return {
-        ...user,
-        achievements: scannedAchievements,
-        totalPoints: user.totalPoints + 20 // award bonus points for achievement unlocks!
-      };
-    }
-    return { ...user, achievements: scannedAchievements };
-  };
+  // Achievements scanning handled by imported runAchievementScans utility function
 
   // Navigation action handlers
   const navigateToTab = (tab: string) => {
@@ -407,7 +361,7 @@ function App() {
       <aside className={`sidebar ${mobileMenuOpen ? 'open' : ''}`}>
         <div>
           <div className="logo-section">
-            <Leaf className="logo-icon" size={28} />
+            <Leaf className="logo-icon" size={28} aria-hidden="true" />
             <span className="logo-text">CarbAware</span>
           </div>
 
@@ -418,7 +372,7 @@ function App() {
                 onClick={() => navigateToTab('dashboard')}
                 disabled={!profile.onboarded}
               >
-                <LayoutGrid size={18} /> Dashboard
+                <LayoutGrid size={18} aria-hidden="true" /> Dashboard
               </button>
             </li>
             <li className="nav-item">
@@ -427,7 +381,7 @@ function App() {
                 onClick={() => navigateToTab('habits')}
                 disabled={!profile.onboarded}
               >
-                <Award size={18} /> Daily Actions
+                <Award size={18} aria-hidden="true" /> Daily Actions
               </button>
             </li>
             <li className="nav-item">
@@ -436,7 +390,7 @@ function App() {
                 onClick={() => navigateToTab('sandbox')}
                 disabled={!profile.onboarded}
               >
-                <Zap size={18} /> Sandbox Sim
+                <Zap size={18} aria-hidden="true" /> Sandbox Sim
               </button>
             </li>
             <li className="nav-item">
@@ -445,7 +399,7 @@ function App() {
                 onClick={() => navigateToTab('offsets')}
                 disabled={!profile.onboarded}
               >
-                <Heart size={18} /> Offset Center
+                <Heart size={18} aria-hidden="true" /> Offset Center
               </button>
             </li>
             <li className="nav-item">
@@ -454,7 +408,7 @@ function App() {
                 onClick={() => navigateToTab('ecodroid')}
                 disabled={!profile.onboarded}
               >
-                <Bot size={18} /> Ecodroid AI
+                <Bot size={18} aria-hidden="true" /> Ecodroid AI
               </button>
             </li>
             <li className="nav-item">
@@ -463,7 +417,7 @@ function App() {
                 onClick={() => navigateToTab('marketplace')}
                 disabled={!profile.onboarded}
               >
-                <ShoppingBag size={18} /> Marketplace
+                <ShoppingBag size={18} aria-hidden="true" /> Marketplace
               </button>
             </li>
             <li className="nav-item">
@@ -471,7 +425,7 @@ function App() {
                 className={`nav-button ${activeTab === 'settings' ? 'active' : ''}`}
                 onClick={() => navigateToTab('settings')}
               >
-                <SettingsIcon size={18} /> Settings
+                <SettingsIcon size={18} aria-hidden="true" /> Settings
               </button>
             </li>
           </nav>
@@ -498,7 +452,7 @@ function App() {
                 style={{ width: '100%', fontSize: '13px', padding: '8px 12px', justifyContent: 'center', marginTop: '8px' }}
                 onClick={() => supabase.auth.signOut()}
               >
-                <LogOut size={14} style={{ marginRight: '6px' }} /> Sign Out
+                <LogOut size={14} style={{ marginRight: '6px' }} aria-hidden="true" /> Sign Out
               </button>
             )}
             {!session && isBypassed && (
@@ -511,7 +465,7 @@ function App() {
                   setProfile(INITIAL_PROFILE);
                 }}
               >
-                <LogOut size={14} style={{ marginRight: '6px' }} /> Exit Local Mode
+                <LogOut size={14} style={{ marginRight: '6px' }} aria-hidden="true" /> Exit Local Mode
               </button>
             )}
           </div>
@@ -533,7 +487,7 @@ function App() {
           className="mobile-header-bar"
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Leaf className="logo-icon" size={22} />
+            <Leaf className="logo-icon" size={22} aria-hidden="true" />
             <span className="logo-text" style={{ fontSize: '18px' }}>CarbAware</span>
           </div>
           <button 
@@ -542,7 +496,7 @@ function App() {
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle Navigation menu"
           >
-            <Menu size={24} />
+            <Menu size={24} aria-hidden="true" />
           </button>
         </div>
 

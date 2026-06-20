@@ -74,23 +74,23 @@ export interface CarbonBreakdown {
  */
 export function calculateCarbonFootprint(data: CarbonData): CarbonBreakdown {
   // 1. TRANSPORTATION
-  const weeklyKm = Number(data.weeklyCommuteKm) || 0;
+  const weeklyKm = Math.max(0, Number(data.weeklyCommuteKm) || 0);
   const transportFactor = EMISSION_FACTORS.transport[data.commuteMode] || 0;
   const yearlyCommuteCO2Kg = weeklyKm * 52 * transportFactor;
-  const shortFlightsCO2Kg = (Number(data.yearlyFlights) || 0) * EMISSION_FACTORS.flights.shortHaul;
-  const longFlightsCO2Kg = (Number(data.yearlyLongFlights) || 0) * EMISSION_FACTORS.flights.longHaul;
+  const shortFlightsCO2Kg = Math.max(0, Number(data.yearlyFlights) || 0) * EMISSION_FACTORS.flights.shortHaul;
+  const longFlightsCO2Kg = Math.max(0, Number(data.yearlyLongFlights) || 0) * EMISSION_FACTORS.flights.longHaul;
   
   const transportTotalTonnes = (yearlyCommuteCO2Kg + shortFlightsCO2Kg + longFlightsCO2Kg) / 1000;
 
   // 2. HOME ENERGY
   // Electricity contribution: monthly bill * 12 * base factor * source factor
   // We approximate $1 / unit of bill corresponds to ~6 kWh, with standard mixed grid footprint
-  const monthlyBill = Number(data.monthlyElectricBill) || 0;
+  const monthlyBill = Math.max(0, Number(data.monthlyElectricBill) || 0);
   const electricityMultiplier = EMISSION_FACTORS.electricity[data.electricitySource] || 1.0;
   const annualElectricityCO2Kg = monthlyBill * 12 * 0.45 * electricityMultiplier; // base multiplier
 
   // Heating contribution based on home size and fuel type
-  const homeSize = Number(data.homeSizeSqM) || 0;
+  const homeSize = Math.max(0, Number(data.homeSizeSqM) || 0);
   const heatingFactor = EMISSION_FACTORS.heating[data.heatingFuel] || 0;
   const annualHeatingCO2Kg = homeSize * heatingFactor;
 

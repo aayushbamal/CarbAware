@@ -26,7 +26,7 @@ export const OffsetProjects: React.FC<OffsetProjectsProps> = ({ profile, onPurch
     {
       id: 'p1',
       title: 'Amazon Reforestation',
-      icon: <Trees size={24} style={{ color: '#10b981' }} />,
+      icon: <Trees size={24} style={{ color: '#10b981' }} aria-hidden="true" />,
       badge: '🌲',
       costPerTonne: 200,
       description: 'Supports planting native trees in deforested areas of Brazil to rebuild ecosystems and sequester CO₂.',
@@ -35,7 +35,7 @@ export const OffsetProjects: React.FC<OffsetProjectsProps> = ({ profile, onPurch
     {
       id: 'p2',
       title: 'North Sea Offshore Wind',
-      icon: <Wind size={24} style={{ color: '#06b6d4' }} />,
+      icon: <Wind size={24} style={{ color: '#06b6d4' }} aria-hidden="true" />,
       badge: '💨',
       costPerTonne: 150,
       description: 'Funds the installation of high-efficiency ocean wind farms to feed clean power into mixed grids.',
@@ -44,7 +44,7 @@ export const OffsetProjects: React.FC<OffsetProjectsProps> = ({ profile, onPurch
     {
       id: 'p3',
       title: 'Sahara Solar Infrastructure',
-      icon: <Zap size={24} style={{ color: '#f59e0b' }} />,
+      icon: <Zap size={24} style={{ color: '#f59e0b' }} aria-hidden="true" />,
       badge: '☀️',
       costPerTonne: 120,
       description: 'Expands concentrated solar farm grids in desert regions to replace heavy coal generators.',
@@ -71,7 +71,7 @@ export const OffsetProjects: React.FC<OffsetProjectsProps> = ({ profile, onPurch
         </div>
 
         <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Coins style={{ color: '#eab308' }} size={24} />
+          <Coins style={{ color: '#eab308' }} size={24} aria-hidden="true" />
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>REDEEMABLE XP</div>
             <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{profile.totalPoints} XP</div>
@@ -100,7 +100,7 @@ export const OffsetProjects: React.FC<OffsetProjectsProps> = ({ profile, onPurch
         </div>
 
         <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <Heart size={36} style={{ color: '#ef4444', fill: '#ef4444' }} />
+          <Heart size={36} style={{ color: '#ef4444', fill: '#ef4444' }} aria-hidden="true" />
           <div style={{ textAlign: 'left' }}>
             <h4>Why Offset?</h4>
             <p className="info-text mt-4" style={{ fontSize: '13px' }}>

@@ -73,14 +73,15 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         {/* Profile Details Panel */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <User size={20} style={{ color: 'var(--primary)' }} />
+            <User size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
             <h3>Profile Customization</h3>
           </div>
 
           <div className="grid-2" style={{ gap: '20px' }}>
             <div className="settings-group">
-              <label className="settings-label">Display Name</label>
+              <label htmlFor="settings-display-name" className="settings-label">Display Name</label>
               <input 
+                id="settings-display-name"
                 type="text" 
                 className="styled-input" 
                 style={{ width: '100%', height: '40px', paddingLeft: '14px' }}
@@ -90,8 +91,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
             </div>
 
             <div className="settings-group">
-              <label className="settings-label">Profile Avatar Emoji</label>
+              <label htmlFor="settings-avatar-emoji" className="settings-label">Profile Avatar Emoji</label>
               <select 
+                id="settings-avatar-emoji"
                 className="settings-select"
                 value={avatarEmoji}
                 onChange={(e) => setAvatarEmoji(e.target.value)}
@@ -111,14 +113,15 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         {/* Ecodroid AI Coach Settings */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <Bot size={20} style={{ color: 'var(--primary)' }} />
+            <Bot size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
             <h3>Ecodroid AI Preferences</h3>
           </div>
 
           <div className="grid-2" style={{ gap: '20px' }}>
             <div className="settings-group">
-              <label className="settings-label">Assistant Persona</label>
+              <label htmlFor="settings-assistant-persona" className="settings-label">Assistant Persona</label>
               <select 
+                id="settings-assistant-persona"
                 className="settings-select"
                 value={persona}
                 onChange={(e) => setPersona(e.target.value as any)}
@@ -132,12 +135,13 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
 
             <div className="settings-group">
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <label className="settings-label" style={{ margin: 0 }}>Model Temperature (Creativity)</label>
+                <label htmlFor="settings-model-temperature" className="settings-label" style={{ margin: 0 }}>Model Temperature (Creativity)</label>
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)' }}>{temperature}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Precise</span>
                 <input 
+                  id="settings-model-temperature"
                   type="range"
                   min="0.1"
                   max="1.0"
@@ -155,14 +159,15 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         {/* Visual Customization & Glassmorphism Panel */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <Layout size={20} style={{ color: 'var(--primary)' }} />
+            <Layout size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
             <h3>Visual & Theme Settings</h3>
           </div>
 
           <div className="grid-2" style={{ gap: '20px', marginBottom: '20px' }}>
             <div className="settings-group">
-              <label className="settings-label">Color Theme</label>
+              <label htmlFor="settings-color-theme" className="settings-label">Color Theme</label>
               <select 
+                id="settings-color-theme"
                 className="settings-select"
                 value={theme}
                 onChange={(e) => setTheme(e.target.value as any)}
@@ -175,28 +180,34 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
 
             <div className="settings-group">
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <label className="settings-label" style={{ margin: 0 }}>Glass Panel Opacity</label>
+                <label htmlFor="settings-panel-opacity" className="settings-label" style={{ margin: 0 }}>Glass Panel Opacity</label>
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--primary)' }}>{(panelOpacity * 100).toFixed(0)}%</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Clear</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Translucent</span>
                 <input 
+                  id="settings-panel-opacity"
                   type="range"
-                  min="0.03"
-                  max="0.4"
+                  min="0.05"
+                  max="0.95"
                   step="0.01"
                   style={{ flexGrow: 1 }}
                   value={panelOpacity}
                   onChange={(e) => setPanelOpacity(parseFloat(e.target.value))}
+                  aria-describedby="settings-opacity-desc"
                 />
-                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Frosted</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-sub)' }}>Opaque</span>
               </div>
+              <span id="settings-opacity-desc" style={{ fontSize: '10px', color: 'var(--text-sub)', marginTop: '4px', display: 'block' }}>
+                Increase opacity up to 95% for solid, high-contrast readability.
+              </span>
             </div>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
-            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+            <label htmlFor="settings-compact-mode" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
+                id="settings-compact-mode"
                 type="checkbox" 
                 checked={compactMode}
                 onChange={(e) => setCompactMode(e.target.checked)}
@@ -207,8 +218,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               </div>
             </label>
 
-            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+            <label htmlFor="settings-reduce-motion" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
+                id="settings-reduce-motion"
                 type="checkbox" 
                 checked={reduceMotion}
                 onChange={(e) => setReduceMotion(e.target.checked)}
@@ -224,13 +236,14 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         {/* Notifications preferences */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px' }}>
-            <Bell size={20} style={{ color: 'var(--primary)' }} />
+            <Bell size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
             <h3>Notification Preferences</h3>
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px' }}>
-            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+            <label htmlFor="settings-notify-habits" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
+                id="settings-notify-habits"
                 type="checkbox" 
                 checked={notifyHabits}
                 onChange={(e) => setNotifyHabits(e.target.checked)}
@@ -241,8 +254,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               </div>
             </label>
 
-            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+            <label htmlFor="settings-notify-digest" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
+                id="settings-notify-digest"
                 type="checkbox" 
                 checked={notifyDigest}
                 onChange={(e) => setNotifyDigest(e.target.checked)}
@@ -253,8 +267,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               </div>
             </label>
 
-            <label className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
+            <label htmlFor="settings-notify-achievements" className="option-card" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '12px', cursor: 'pointer', padding: '12px' }}>
               <input 
+                id="settings-notify-achievements"
                 type="checkbox" 
                 checked={notifyAchievements}
                 onChange={(e) => setNotifyAchievements(e.target.checked)}
@@ -269,13 +284,13 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
 
         {/* Save Options Bar */}
         <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <button type="button" className="btn btn-secondary" onClick={handleExportData}>
-            <Download size={16} /> Export Profile Data (JSON)
+          <button type="button" className="btn btn-secondary" onClick={handleExportData} aria-label="Export profile data as JSON">
+            <Download size={16} aria-hidden="true" /> Export Profile Data (JSON)
           </button>
-          <button type="button" className="btn btn-primary" onClick={handleSave}>
+          <button type="button" className="btn btn-primary" onClick={handleSave} aria-label="Save configurations">
             {saved ? (
               <>
-                Configurations Saved <Check size={16} />
+                Configurations Saved <Check size={16} aria-hidden="true" />
               </>
             ) : (
               'Save Configurations'
@@ -286,7 +301,7 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
         {/* Danger Zone Factory Reset */}
         <div className="glass-card" style={{ borderColor: 'rgba(239, 68, 68, 0.25)', marginTop: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-            <AlertTriangle size={20} style={{ color: 'var(--danger)' }} />
+            <AlertTriangle size={20} style={{ color: 'var(--danger)' }} aria-hidden="true" />
             <h3 style={{ color: '#ffffff' }}>Danger Zone</h3>
           </div>
 
@@ -300,8 +315,9 @@ export const Settings: React.FC<SettingsProps> = ({ profile, onUpdateSettings, o
               className="btn" 
               style={{ background: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger)', border: '1px solid var(--danger)' }}
               onClick={() => setShowConfirm(true)}
+              aria-label="Reset profile data"
             >
-              <RotateCcw size={16} /> Reset Profile Data
+              <RotateCcw size={16} aria-hidden="true" /> Reset Profile Data
             </button>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', maxWidth: '400px' }}>

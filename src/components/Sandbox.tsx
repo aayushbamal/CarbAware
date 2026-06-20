@@ -62,16 +62,17 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
         </div>
         
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button type="button" className="btn btn-secondary" onClick={handleReset}>
-            <RefreshCw size={16} /> Reset Sliders
+          <button type="button" className="btn btn-secondary" onClick={handleReset} aria-label="Reset sliders">
+            <RefreshCw size={16} aria-hidden="true" /> Reset Sliders
           </button>
           <button 
             type="button" 
             className="btn btn-primary" 
             onClick={handleApply}
             disabled={savedTonnes === 0}
+            aria-label="Apply simulated options to profile"
           >
-            Apply to Profile <Check size={16} />
+            Apply to Profile <Check size={16} aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -84,10 +85,11 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
           {/* Commute Distance slider */}
           <div className="slider-group">
             <div className="slider-header">
-              <span className="slider-label">Weekly Commute (km)</span>
+              <label htmlFor="sandbox-commute" className="slider-label">Weekly Commute (km)</label>
               <span className="slider-value">{sandboxData.weeklyCommuteKm} km</span>
             </div>
             <input 
+              id="sandbox-commute"
               type="range"
               min="0"
               max="1000"
@@ -114,6 +116,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.commuteMode === opt.id ? 'selected' : ''}`}
                   onClick={() => handleSelect('commuteMode', opt.id as any)}
+                  aria-pressed={sandboxData.commuteMode === opt.id}
                 >
                   {opt.label}
                 </button>
@@ -136,6 +139,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.electricitySource === opt.id ? 'selected' : ''}`}
                   onClick={() => handleSelect('electricitySource', opt.id as any)}
+                  aria-pressed={sandboxData.electricitySource === opt.id}
                 >
                   {opt.label}
                 </button>
@@ -159,6 +163,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
                   style={{ padding: '12px 14px', fontSize: '13px' }}
                   className={`option-card ${sandboxData.dietType === opt.id ? 'selected' : ''}`}
                   onClick={() => handleSelect('dietType', opt.id as any)}
+                  aria-pressed={sandboxData.dietType === opt.id}
                 >
                   {opt.label}
                 </button>
@@ -170,7 +175,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
         {/* Live Simulation Results */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
           <div className="glass-card sandbox-results-panel">
-            <Trees size={48} style={{ color: 'var(--primary)', marginBottom: '8px' }} />
+            <Trees size={48} style={{ color: 'var(--primary)', marginBottom: '8px' }} aria-hidden="true" />
             <h3 style={{ fontSize: '20px' }}>Potential Annual Savings</h3>
             <div className="savings-highlight">
               {savedTonnes} tonnes CO₂e
@@ -235,7 +240,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
             </div>
 
             <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', marginTop: '8px', fontSize: '12px', color: 'var(--text-sub)' }}>
-              <Info size={14} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '2px' }} />
+              <Info size={14} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
               <p>
                 Applying sandbox metrics updates your main questionnaire data. This scales down your default dashboard breakdown and updates recommendations.
               </p>

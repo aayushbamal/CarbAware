@@ -68,7 +68,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
         </div>
 
         <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <Coins style={{ color: '#eab308' }} size={24} />
+          <Coins style={{ color: '#eab308' }} size={24} aria-hidden="true" />
           <div style={{ textAlign: 'left' }}>
             <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>YOUR REDEEMABLE XP</div>
             <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{profile.totalPoints} XP</div>
@@ -88,20 +88,20 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
         gap: '12px' 
       }}>
         <div style={{ background: 'var(--primary-glow)', padding: '16px', borderRadius: '50%', color: 'var(--primary)', display: 'inline-block' }}>
-          <Lock size={32} />
+          <Lock size={32} aria-hidden="true" />
         </div>
         <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0 }}>Storefront Currently Locked</h2>
         <p style={{ color: 'var(--text-sub)', maxWidth: '500px', fontSize: '14px', margin: 0 }}>
           The merchandise checkout system is **Coming Soon**! We are working with ethical, zero-emission suppliers to fulfill physical rewards. Keep completing Daily Actions and winning battles in the Prompt Arena to bank your XP!
         </p>
         <span style={{ fontSize: '12px', color: 'var(--primary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
-          <Sparkles size={14} /> Beta Phase 1 Storefront
+          <Sparkles size={14} aria-hidden="true" /> Beta Phase 1 Storefront
         </span>
       </div>
 
       {/* Merch Catalog Grid */}
       <h3 className="mb-4" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <ShoppingBag size={20} style={{ color: 'var(--primary)' }} />
+        <ShoppingBag size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
         Preview Sustainable Merchandise
       </h3>
 
@@ -137,7 +137,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
               {/* Price and Lock action */}
               <div style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)', paddingTop: '12px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', marginBottom: '12px', alignItems: 'center' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-sub)' }}><Gift size={14} /> Price:</span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--text-sub)' }}><Gift size={14} aria-hidden="true" /> Price:</span>
                   <strong style={{ color: '#eab308', display: 'flex', alignItems: 'center', gap: '4px' }}>{item.xpCost} XP</strong>
                 </div>
 
@@ -147,7 +147,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
                   style={{ width: '100%', justifyContent: 'center', cursor: 'not-allowed', opacity: 0.6 }}
                   disabled
                 >
-                  <Lock size={14} style={{ marginRight: '6px' }} /> Coming Soon
+                  <Lock size={14} style={{ marginRight: '6px' }} aria-hidden="true" /> Coming Soon
                 </button>
               </div>
             </div>
@@ -156,7 +156,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ profile }) => {
       </div>
 
       <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start', fontSize: '12px', color: 'var(--text-sub)', marginTop: '8px' }}>
-        <Info size={14} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '2px' }} />
+        <Info size={14} style={{ color: 'var(--secondary)', flexShrink: 0, marginTop: '2px' }} aria-hidden="true" />
         <p>
           Once the store goes live, redeeming products will deduct XP points from your profile. Shipping is zero-carbon offset certified.
         </p>

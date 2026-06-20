@@ -70,14 +70,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
         </div>
         <div style={{ display: 'flex', gap: '16px' }}>
           <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Award style={{ color: '#ff8b3d' }} size={24} />
+            <Award style={{ color: '#ff8b3d' }} size={24} aria-hidden="true" />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>ECO POINTS</div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{profile.totalPoints} XP</div>
             </div>
           </div>
           <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <TrendingDown style={{ color: 'var(--primary)' }} size={24} />
+            <TrendingDown style={{ color: 'var(--primary)' }} size={24} aria-hidden="true" />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>DAILY STREAK</div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{profile.streakCount} days</div>
@@ -117,7 +117,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
             </div>
           ) : (
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', color: 'var(--text-sub)', marginTop: '8px' }}>
-              <Target size={14} style={{ color: 'var(--primary)' }} />
+              <Target size={14} style={{ color: 'var(--primary)' }} aria-hidden="true" />
               <span>Target threshold: 2.0 tonnes</span>
             </div>
           )}
@@ -130,25 +130,25 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
             <div className="chart-bar-wrapper">
               <span className="chart-bar-value" style={{ color: '#3b82f6' }}>{breakdown.transport}</span>
               <div className="chart-bar bar-transport" style={{ height: getBarHeightPercent(breakdown.transport) }} />
-              <span className="chart-bar-label"><Car size={12} style={{ marginRight: '4px' }} />Transit</span>
+              <span className="chart-bar-label"><Car size={12} style={{ marginRight: '4px' }} aria-hidden="true" />Transit</span>
             </div>
             
             <div className="chart-bar-wrapper">
               <span className="chart-bar-value" style={{ color: '#f59e0b' }}>{breakdown.homeEnergy}</span>
               <div className="chart-bar bar-home" style={{ height: getBarHeightPercent(breakdown.homeEnergy) }} />
-              <span className="chart-bar-label"><Flame size={12} style={{ marginRight: '4px' }} />Energy</span>
+              <span className="chart-bar-label"><Flame size={12} style={{ marginRight: '4px' }} aria-hidden="true" />Energy</span>
             </div>
 
             <div className="chart-bar-wrapper">
               <span className="chart-bar-value" style={{ color: '#10b981' }}>{breakdown.diet}</span>
               <div className="chart-bar bar-diet" style={{ height: getBarHeightPercent(breakdown.diet) }} />
-              <span className="chart-bar-label"><Utensils size={12} style={{ marginRight: '4px' }} />Diet</span>
+              <span className="chart-bar-label"><Utensils size={12} style={{ marginRight: '4px' }} aria-hidden="true" />Diet</span>
             </div>
 
             <div className="chart-bar-wrapper">
               <span className="chart-bar-value" style={{ color: '#a855f7' }}>{breakdown.wasteShopping}</span>
               <div className="chart-bar bar-waste" style={{ height: getBarHeightPercent(breakdown.wasteShopping) }} />
-              <span className="chart-bar-label"><ShoppingBag size={12} style={{ marginRight: '4px' }} />Waste</span>
+              <span className="chart-bar-label"><ShoppingBag size={12} style={{ marginRight: '4px' }} aria-hidden="true" />Waste</span>
             </div>
           </div>
         </div>
@@ -197,7 +197,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
       <div className="grid-2">
         <div className="glass-card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
           <div style={{ background: 'var(--primary-glow)', padding: '16px', borderRadius: '50%', color: 'var(--primary)' }}>
-            <Zap size={32} />
+            <Zap size={32} aria-hidden="true" />
           </div>
           <div style={{ textAlign: 'left' }}>
             <h3 style={{ marginBottom: '6px' }}>Form Daily Habits</h3>
@@ -210,7 +210,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
 
         <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Info size={16} style={{ color: 'var(--secondary)' }} />
+            <Info size={16} style={{ color: 'var(--secondary)' }} aria-hidden="true" />
             <h3>Your Emissions Footprint Profile</h3>
           </div>
           <div style={{ fontSize: '13px', color: 'var(--text-sub)' }}>

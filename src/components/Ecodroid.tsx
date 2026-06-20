@@ -217,8 +217,8 @@ Guidelines:
           </p>
         </div>
 
-        <button type="button" className="btn btn-secondary" onClick={resetChat}>
-          <RefreshCw size={14} /> Clear Chat
+        <button type="button" className="btn btn-secondary" onClick={resetChat} aria-label="Clear chat history">
+          <RefreshCw size={14} aria-hidden="true" /> Clear Chat
         </button>
       </div>
 
@@ -249,7 +249,7 @@ Guidelines:
                 gap: '8px' 
               }}
             >
-              <AlertTriangle size={16} style={{ flexShrink: 0 }} />
+              <AlertTriangle size={16} style={{ flexShrink: 0 }} aria-hidden="true" />
               <span>{apiError}</span>
             </div>
           )}
@@ -362,10 +362,12 @@ Guidelines:
             }}
           >
             <input
+              id="chat-input"
               type="text"
               className="styled-input"
               style={{ flexGrow: 1, height: '44px', fontSize: '14px', paddingLeft: '16px' }}
               placeholder="Ask Ecodroid about carbon savings..."
+              aria-label="Ask Ecodroid about carbon savings"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               disabled={isLoading}
@@ -375,8 +377,9 @@ Guidelines:
               className="btn btn-primary"
               style={{ height: '44px', width: '44px', padding: 0, justifyContent: 'center' }}
               disabled={isLoading || !inputMessage.trim()}
+              aria-label="Send message to Ecodroid"
             >
-              <Send size={18} />
+              <Send size={18} aria-hidden="true" />
             </button>
           </form>
         </div>
@@ -386,7 +389,7 @@ Guidelines:
           {/* Active Ecodroid Configuration Display */}
           <div className="glass-card" style={{ padding: '16px 20px' }}>
             <h3 style={{ fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bot size={16} style={{ color: 'var(--primary)' }} /> Ecodroid Bio
+              <Bot size={16} style={{ color: 'var(--primary)' }} aria-hidden="true" /> Ecodroid Bio
             </h3>
             <p className="info-text mt-4" style={{ fontSize: '12px', lineHeight: 1.4 }}>
               Ecodroid is active under the <strong>{profile.settings?.assistantPersona || 'friendly'}</strong> persona, querying Llama 3.3 with <strong>{((profile.settings?.modelTemperature || 0.7) * 100).toFixed(0)}% creativity</strong>.

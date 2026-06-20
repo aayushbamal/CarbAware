@@ -77,4 +77,61 @@ describe('Carbon Footprint Calculator Utilities', () => {
     expect(savingsResult.newBreakdown.total).toBeLessThan(currentBreakdown.total);
     expect(savingsResult.treesEquivalent).toBeGreaterThan(0);
   });
+
+  it('calculates diet footprint categories correctly according to definitions', () => {
+    const profile = { ...lowImpactProfile };
+    
+    profile.dietType = 'vegan';
+    expect(calculateCarbonFootprint(profile).diet).toBe(0.6);
+    
+    profile.dietType = 'vegetarian';
+    expect(calculateCarbonFootprint(profile).diet).toBe(1.0);
+    
+    profile.dietType = 'moderate_meat';
+    expect(calculateCarbonFootprint(profile).diet).toBe(1.7);
+    
+    profile.dietType = 'heavy_meat';
+    expect(calculateCarbonFootprint(profile).diet).toBe(2.9);
+  });
+
+  it('calculates waste footprint categories correctly based on levels', () => {
+    const profile = { ...lowImpactProfile };
+    
+    profile.foodWasteLevel = 'low';
+    profile.recyclingHabits = 'all';
+    profile.shoppingFrequency = 'rarely';
+    const lowWaste = calculateCarbonFootprint(profile).wasteShopping;
+
+    profile.foodWasteLevel = 'high';
+    profile.recyclingHabits = 'none';
+    profile.shoppingFrequency = 'frequently';
+    const highWaste = calculateCarbonFootprint(profile).wasteShopping;
+
+    expect(highWaste).toBeGreaterThan(lowWaste);
+  });
+
+  it('handles negative inputs defensively by clamping them to 0', () => {
+    const negativeProfile: CarbonData = {
+      commuteMode: 'car_petrol',
+      weeklyCommuteKm: -100,
+      yearlyFlights: -5,
+      yearlyLongFlights: -2,
+      electricitySource: 'grid_coal',
+      monthlyElectricBill: -50,
+      heatingFuel: 'natural_gas',
+      homeSizeSqM: -200,
+      dietType: 'vegan',
+      foodWasteLevel: 'low',
+      recyclingHabits: 'all',
+      shoppingFrequency: 'rarely'
+    };
+
+    const result = calculateCarbonFootprint(negativeProfile);
+
+    // With negative inputs clamped, transport and homeEnergy should be 0 tonnes
+    expect(result.transport).toBe(0);
+    expect(result.homeEnergy).toBe(0);
+    expect(result.diet).toBe(0.6); // vegan base diet footprint
+    expect(result.total).toBe(0.6 + result.wasteShopping); // total should just be diet + waste & shopping
+  });
 });

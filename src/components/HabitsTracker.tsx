@@ -27,14 +27,14 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
 
         <div style={{ display: 'flex', gap: '16px' }}>
           <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Flame style={{ color: '#ff5a00' }} size={24} className="pulse-red" />
+            <Flame style={{ color: '#ff5a00' }} size={24} className="pulse-red" aria-hidden="true" />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>STREAK</div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{streakCount} Days</div>
             </div>
           </div>
           <div className="glass-card" style={{ padding: '12px 20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Award style={{ color: 'var(--primary)' }} size={24} />
+            <Award style={{ color: 'var(--primary)' }} size={24} aria-hidden="true" />
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontSize: '11px', color: 'var(--text-sub)' }}>TOTAL SCORE</div>
               <div style={{ fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>{totalPoints} XP</div>
@@ -66,7 +66,7 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
                     onClick={() => onToggleHabit(habit.id)}
                     aria-label={`Mark "${habit.name}" as ${habit.completed ? 'incomplete' : 'complete'}`}
                   >
-                    <Check size={14} style={{ strokeWidth: 3 }} />
+                    <Check size={14} style={{ strokeWidth: 3 }} aria-hidden="true" />
                   </button>
                   
                   <div className="habit-details">
@@ -81,7 +81,7 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
 
                 {habit.streak > 0 && (
                   <div className="habit-streak">
-                    <Flame size={14} />
+                    <Flame size={14} aria-hidden="true" />
                     <span>{habit.streak}d</span>
                   </div>
                 )}
@@ -93,7 +93,7 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
         {/* Gamified Achievements Panel */}
         <div className="glass-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-            <Award size={20} style={{ color: 'var(--primary)' }} />
+            <Award size={20} style={{ color: 'var(--primary)' }} aria-hidden="true" />
             <h3>Achievements & Badges</h3>
           </div>
 
@@ -114,7 +114,7 @@ export const HabitsTracker: React.FC<HabitsTrackerProps> = ({ profile, onToggleH
                   </span>
                 ) : (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', fontSize: '9px', color: 'var(--text-muted)' }}>
-                    <Lock size={10} />
+                    <Lock size={10} aria-hidden="true" />
                     <span>{badge.requirement}</span>
                   </div>
                 )}

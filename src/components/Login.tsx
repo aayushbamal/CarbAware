@@ -127,7 +127,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-            <Shield size={36} />
+            <Shield size={36} aria-hidden="true" />
           </div>
           <h2 style={{ 
             fontSize: '32px', 
@@ -158,7 +158,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             lineHeight: 1.4
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--warning)', fontWeight: 700, marginBottom: '6px' }}>
-              <AlertTriangle size={16} />
+              <AlertTriangle size={16} aria-hidden="true" />
               <span>Supabase Connection Missing</span>
             </div>
             <p style={{ color: 'var(--text-sub)', marginBottom: '8px' }}>
@@ -182,7 +182,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
               style={{ width: '100%', fontSize: '11px', padding: '8px', justifyContent: 'center' }}
               onClick={onBypassAuth}
             >
-              <Sparkles size={12} /> Bypass Auth (Simulated Local Mode)
+              <Sparkles size={12} aria-hidden="true" /> Bypass Auth (Simulated Local Mode)
             </button>
           </div>
         )}
@@ -201,7 +201,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             alignItems: 'center',
             gap: '8px'
           }}>
-            <AlertTriangle size={14} style={{ flexShrink: 0 }} />
+            <AlertTriangle size={14} style={{ flexShrink: 0 }} aria-hidden="true" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -219,7 +219,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             alignItems: 'center',
             gap: '8px'
           }}>
-            <Check size={14} style={{ flexShrink: 0 }} />
+            <Check size={14} style={{ flexShrink: 0 }} aria-hidden="true" />
             <span>{successMsg}</span>
           </div>
         )}
@@ -229,10 +229,11 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {isSignUp && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Full Name</label>
+                <label htmlFor="login-name" style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Full Name</label>
                 <div style={{ position: 'relative' }}>
-                  <User size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <User size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} aria-hidden="true" />
                   <input 
+                    id="login-name"
                     type="text" 
                     className="styled-input" 
                     style={{ width: '100%', paddingLeft: '40px', fontSize: '14px', height: '44px' }}
@@ -246,10 +247,11 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Email Address</label>
+              <label htmlFor="login-email" style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Email Address</label>
               <div style={{ position: 'relative' }}>
-                <Mail size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <Mail size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} aria-hidden="true" />
                 <input 
+                  id="login-email"
                   type="email" 
                   className="styled-input" 
                   style={{ width: '100%', paddingLeft: '40px', fontSize: '14px', height: '44px' }}
@@ -262,10 +264,11 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Password</label>
+              <label htmlFor="login-password" style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-main)' }}>Password</label>
               <div style={{ position: 'relative' }}>
-                <Lock size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <Lock size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} aria-hidden="true" />
                 <input 
+                  id="login-password"
                   type="password" 
                   className="styled-input" 
                   style={{ width: '100%', paddingLeft: '40px', fontSize: '14px', height: '44px' }}
@@ -286,7 +289,7 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
             >
               {loading ? 'Authenticating...' : (
                 <>
-                  {isSignUp ? 'Create Eco Account' : 'Access Account'} <ArrowRight size={16} />
+                  {isSignUp ? 'Create Eco Account' : 'Access Account'} <ArrowRight size={16} aria-hidden="true" />
                 </>
               )}
             </button>
