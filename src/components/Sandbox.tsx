@@ -101,99 +101,223 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
         <div className="glass-card sandbox-sliders-container">
           <h3>Simulated Lifestyle Choices</h3>
           
-          {/* Commute Distance slider */}
-          <div className="slider-group">
-            <div className="slider-header">
-              <label htmlFor="sandbox-commute" className="slider-label">Weekly Commute (km)</label>
-              <span className="slider-value">{sandboxData.weeklyCommuteKm} km</span>
+          {/* Section 1: Travel & Commute */}
+          <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '16px', marginBottom: '16px' }}>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '12px', fontSize: '14px', fontWeight: 600 }}>🚗 Travel & Commute</h4>
+            
+            {/* Commute Distance slider */}
+            <div className="slider-group">
+              <div className="slider-header">
+                <label htmlFor="sandbox-commute" className="slider-label">Weekly Commute (km)</label>
+                <span className="slider-value">{sandboxData.weeklyCommuteKm} km</span>
+              </div>
+              <input 
+                id="sandbox-commute"
+                data-testid="sandbox-commute-slider"
+                type="range"
+                min="0"
+                max="1000"
+                step="10"
+                className="sandbox-slider"
+                value={sandboxData.weeklyCommuteKm}
+                onChange={(e) => handleSliderChange('weeklyCommuteKm', parseInt(e.target.value))}
+              />
             </div>
-            <input 
-              id="sandbox-commute"
-              data-testid="sandbox-commute-slider"
-              type="range"
-              min="0"
-              max="1000"
-              step="10"
-              className="sandbox-slider"
-              value={sandboxData.weeklyCommuteKm}
-              onChange={(e) => handleSliderChange('weeklyCommuteKm', parseInt(e.target.value))}
-            />
+
+            {/* Commute Mode Selector */}
+            <div style={{ marginBottom: '14px' }}>
+              <label className="number-input-label mb-2" style={{ display: 'block', fontSize: '13px' }}>Commute Mode</label>
+              <div className="options-grid" style={{ gap: '8px' }}>
+                {[
+                  { id: 'car_petrol', label: 'Petrol Car' },
+                  { id: 'car_electric', label: 'Electric Car' },
+                  { id: 'transit', label: 'Transit' },
+                  { id: 'bicycle_walk', label: 'Active Travel' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    id={`sandbox-commute-${opt.id}`}
+                    data-testid={`sandbox-commute-${opt.id}`}
+                    type="button"
+                    style={{ padding: '8px 10px', fontSize: '12px' }}
+                    className={`option-card ${sandboxData.commuteMode === opt.id ? 'selected' : ''}`}
+                    onClick={() => handleSelect('commuteMode', opt.id as CarbonData['commuteMode'])}
+                    aria-pressed={sandboxData.commuteMode === opt.id}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Flights sliders */}
+            <div className="grid-2" style={{ gap: '16px' }}>
+              <div className="slider-group" style={{ margin: 0 }}>
+                <div className="slider-header">
+                  <label htmlFor="sandbox-short-flights" className="slider-label" style={{ fontSize: '12px' }}>Short Flights (yearly)</label>
+                  <span className="slider-value" style={{ fontSize: '12px' }}>{sandboxData.yearlyFlights}</span>
+                </div>
+                <input 
+                  id="sandbox-short-flights"
+                  data-testid="sandbox-short-flights-slider"
+                  type="range"
+                  min="0"
+                  max="30"
+                  step="1"
+                  className="sandbox-slider"
+                  value={sandboxData.yearlyFlights}
+                  onChange={(e) => handleSliderChange('yearlyFlights', parseInt(e.target.value))}
+                />
+              </div>
+
+              <div className="slider-group" style={{ margin: 0 }}>
+                <div className="slider-header">
+                  <label htmlFor="sandbox-long-flights" className="slider-label" style={{ fontSize: '12px' }}>Long Flights (yearly)</label>
+                  <span className="slider-value" style={{ fontSize: '12px' }}>{sandboxData.yearlyLongFlights}</span>
+                </div>
+                <input 
+                  id="sandbox-long-flights"
+                  data-testid="sandbox-long-flights-slider"
+                  type="range"
+                  min="0"
+                  max="20"
+                  step="1"
+                  className="sandbox-slider"
+                  value={sandboxData.yearlyLongFlights}
+                  onChange={(e) => handleSliderChange('yearlyLongFlights', parseInt(e.target.value))}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Commute Mode Selector */}
-          <div>
-            <label className="number-input-label mb-4" style={{ display: 'block', fontSize: '14px' }}>Commute Mode</label>
-            <div className="options-grid" style={{ gap: '10px' }}>
-              {[
-                { id: 'car_petrol', label: 'Petrol Car' },
-                { id: 'car_electric', label: 'Electric Car' },
-                { id: 'transit', label: 'Transit' },
-                { id: 'bicycle_walk', label: 'Active Travel' }
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  id={`sandbox-commute-${opt.id}`}
-                  data-testid={`sandbox-commute-${opt.id}`}
-                  type="button"
-                  style={{ padding: '12px 14px', fontSize: '13px' }}
-                  className={`option-card ${sandboxData.commuteMode === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('commuteMode', opt.id as CarbonData['commuteMode'])}
-                  aria-pressed={sandboxData.commuteMode === opt.id}
-                >
-                  {opt.label}
-                </button>
-              ))}
+          {/* Section 2: Home Energy */}
+          <div style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '16px', marginBottom: '16px' }}>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '12px', fontSize: '14px', fontWeight: 600 }}>💡 Home & Power Grid</h4>
+
+            {/* Electric Bill slider */}
+            <div className="slider-group">
+              <div className="slider-header">
+                <label htmlFor="sandbox-electric-bill" className="slider-label">Monthly Electric Bill ($)</label>
+                <span className="slider-value">${sandboxData.monthlyElectricBill}</span>
+              </div>
+              <input 
+                id="sandbox-electric-bill"
+                data-testid="sandbox-electric-bill-slider"
+                type="range"
+                min="0"
+                max="500"
+                step="10"
+                className="sandbox-slider"
+                value={sandboxData.monthlyElectricBill}
+                onChange={(e) => handleSliderChange('monthlyElectricBill', parseInt(e.target.value))}
+              />
+            </div>
+
+            {/* Electricity Source */}
+            <div style={{ marginBottom: '14px' }}>
+              <label className="number-input-label mb-2" style={{ display: 'block', fontSize: '13px' }}>Grid Source</label>
+              <div className="options-grid" style={{ gap: '8px' }}>
+                {[
+                  { id: 'grid_coal', label: 'Coal Heavy' },
+                  { id: 'grid_mixed', label: 'Mixed Grid' },
+                  { id: 'solar_renewable', label: 'Renewables' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    id={`sandbox-electricity-${opt.id}`}
+                    data-testid={`sandbox-electricity-${opt.id}`}
+                    type="button"
+                    style={{ padding: '8px 10px', fontSize: '12px' }}
+                    className={`option-card ${sandboxData.electricitySource === opt.id ? 'selected' : ''}`}
+                    onClick={() => handleSelect('electricitySource', opt.id as CarbonData['electricitySource'])}
+                    aria-pressed={sandboxData.electricitySource === opt.id}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Heating Fuel */}
+            <div>
+              <label className="number-input-label mb-2" style={{ display: 'block', fontSize: '13px' }}>Heating Fuel</label>
+              <div className="options-grid" style={{ gap: '8px' }}>
+                {[
+                  { id: 'natural_gas', label: 'Gas' },
+                  { id: 'electricity', label: 'Electric' },
+                  { id: 'heating_oil', label: 'Oil/Coal' },
+                  { id: 'wood', label: 'Biomass' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    id={`sandbox-heating-${opt.id}`}
+                    data-testid={`sandbox-heating-${opt.id}`}
+                    type="button"
+                    style={{ padding: '8px 10px', fontSize: '12px' }}
+                    className={`option-card ${sandboxData.heatingFuel === opt.id ? 'selected' : ''}`}
+                    onClick={() => handleSelect('heatingFuel', opt.id as CarbonData['heatingFuel'])}
+                    aria-pressed={sandboxData.heatingFuel === opt.id}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
-          {/* Electricity Source */}
+          {/* Section 3: Diet & Waste */}
           <div>
-            <label className="number-input-label mb-4" style={{ display: 'block', fontSize: '14px' }}>Electricity Grid</label>
-            <div className="options-grid" style={{ gap: '10px' }}>
-              {[
-                { id: 'grid_coal', label: 'Coal Heavy' },
-                { id: 'grid_mixed', label: 'Mixed Grid' },
-                { id: 'solar_renewable', label: 'Solar/Renewable' }
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  id={`sandbox-electricity-${opt.id}`}
-                  data-testid={`sandbox-electricity-${opt.id}`}
-                  type="button"
-                  style={{ padding: '12px 14px', fontSize: '13px' }}
-                  className={`option-card ${sandboxData.electricitySource === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('electricitySource', opt.id as CarbonData['electricitySource'])}
-                  aria-pressed={sandboxData.electricitySource === opt.id}
-                >
-                  {opt.label}
-                </button>
-              ))}
-            </div>
-          </div>
+            <h4 style={{ color: 'var(--primary)', marginBottom: '12px', fontSize: '14px', fontWeight: 600 }}>🥗 Diet & Waste Management</h4>
 
-          {/* Diet style */}
-          <div>
-            <label className="number-input-label mb-4" style={{ display: 'block', fontSize: '14px' }}>Diet Habits</label>
-            <div className="options-grid" style={{ gap: '10px' }}>
-              {[
-                { id: 'heavy_meat', label: 'Heavy Meat' },
-                { id: 'moderate_meat', label: 'Balanced' },
-                { id: 'vegetarian', label: 'Vegetarian' },
-                { id: 'vegan', label: 'Vegan' }
-              ].map(opt => (
-                <button
-                  key={opt.id}
-                  id={`sandbox-diet-${opt.id}`}
-                  data-testid={`sandbox-diet-${opt.id}`}
-                  type="button"
-                  style={{ padding: '12px 14px', fontSize: '13px' }}
-                  className={`option-card ${sandboxData.dietType === opt.id ? 'selected' : ''}`}
-                  onClick={() => handleSelect('dietType', opt.id as CarbonData['dietType'])}
-                  aria-pressed={sandboxData.dietType === opt.id}
-                >
-                  {opt.label}
-                </button>
-              ))}
+            {/* Diet style */}
+            <div style={{ marginBottom: '14px' }}>
+              <label className="number-input-label mb-2" style={{ display: 'block', fontSize: '13px' }}>Diet Type</label>
+              <div className="options-grid" style={{ gap: '8px' }}>
+                {[
+                  { id: 'heavy_meat', label: 'Heavy Meat' },
+                  { id: 'moderate_meat', label: 'Balanced' },
+                  { id: 'vegetarian', label: 'Vegetarian' },
+                  { id: 'vegan', label: 'Vegan' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    id={`sandbox-diet-${opt.id}`}
+                    data-testid={`sandbox-diet-${opt.id}`}
+                    type="button"
+                    style={{ padding: '8px 10px', fontSize: '12px' }}
+                    className={`option-card ${sandboxData.dietType === opt.id ? 'selected' : ''}`}
+                    onClick={() => handleSelect('dietType', opt.id as CarbonData['dietType'])}
+                    aria-pressed={sandboxData.dietType === opt.id}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Recycling Habits */}
+            <div>
+              <label className="number-input-label mb-2" style={{ display: 'block', fontSize: '13px' }}>Recycling Habits</label>
+              <div className="options-grid" style={{ gap: '8px' }}>
+                {[
+                  { id: 'all', label: 'Recycle All' },
+                  { id: 'some', label: 'Sometimes' },
+                  { id: 'none', label: 'No Recycling' }
+                ].map(opt => (
+                  <button
+                    key={opt.id}
+                    id={`sandbox-recycling-${opt.id}`}
+                    data-testid={`sandbox-recycling-${opt.id}`}
+                    type="button"
+                    style={{ padding: '8px 10px', fontSize: '12px' }}
+                    className={`option-card ${sandboxData.recyclingHabits === opt.id ? 'selected' : ''}`}
+                    onClick={() => handleSelect('recyclingHabits', opt.id as CarbonData['recyclingHabits'])}
+                    aria-pressed={sandboxData.recyclingHabits === opt.id}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </div>

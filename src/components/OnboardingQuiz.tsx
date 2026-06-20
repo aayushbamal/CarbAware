@@ -32,8 +32,16 @@ export const OnboardingQuiz: React.FC<OnboardingQuizProps> = ({ onComplete }) =>
   };
 
   const handleNumberChange = <K extends keyof CarbonData>(key: K, val: string) => {
-    const parsed = Math.max(0, parseInt(val) || 0);
-    setFormData(prev => ({ ...prev, [key]: parsed }));
+    const parsedVal = parseInt(val) || 0;
+    let clampedVal = Math.max(0, parsedVal);
+
+    // Defensive logical upper bounds to preserve numerical stability and realistic layouts
+    if (key === 'weeklyCommuteKm') clampedVal = Math.min(2000, clampedVal);
+    if (key === 'yearlyFlights' || key === 'yearlyLongFlights') clampedVal = Math.min(100, clampedVal);
+    if (key === 'monthlyElectricBill') clampedVal = Math.min(10000, clampedVal);
+    if (key === 'homeSizeSqM') clampedVal = Math.min(1000, clampedVal);
+
+    setFormData(prev => ({ ...prev, [key]: clampedVal }));
   };
 
   const currentFootprint = calculateCarbonFootprint(formData);

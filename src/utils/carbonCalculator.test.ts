@@ -228,4 +228,47 @@ describe('Carbon Footprint Calculator Utilities', () => {
     const netEmissions = Math.max(0, Number((result.total - offset).toFixed(2)));
     expect(netEmissions).toBe(0);
   });
+
+  it('handles extremely high boundary inputs defensively without runtime error or NaN outputs', () => {
+    const highBoundaryProfile: CarbonData = {
+      commuteMode: 'car_petrol',
+      weeklyCommuteKm: 999999,
+      yearlyFlights: 10000,
+      yearlyLongFlights: 5000,
+      electricitySource: 'grid_coal',
+      monthlyElectricBill: 1000000,
+      heatingFuel: 'heating_oil',
+      homeSizeSqM: 99999,
+      dietType: 'heavy_meat',
+      foodWasteLevel: 'high',
+      recyclingHabits: 'none',
+      shoppingFrequency: 'frequently'
+    };
+
+    const result = calculateCarbonFootprint(highBoundaryProfile);
+    expect(result.total).toBeGreaterThan(100);
+    expect(Number.isNaN(result.total)).toBe(false);
+    expect(Number.isFinite(result.total)).toBe(true);
+  });
+
+  it('handles empty/zeroed values correctly and returns a finite default value', () => {
+    const zeroProfile: CarbonData = {
+      commuteMode: 'bicycle_walk',
+      weeklyCommuteKm: 0,
+      yearlyFlights: 0,
+      yearlyLongFlights: 0,
+      electricitySource: 'solar_renewable',
+      monthlyElectricBill: 0,
+      heatingFuel: 'electricity',
+      homeSizeSqM: 0,
+      dietType: 'vegan',
+      foodWasteLevel: 'low',
+      recyclingHabits: 'all',
+      shoppingFrequency: 'rarely'
+    };
+
+    const result = calculateCarbonFootprint(zeroProfile);
+    expect(result.total).toBeLessThan(1.0);
+    expect(Number.isNaN(result.total)).toBe(false);
+  });
 });
