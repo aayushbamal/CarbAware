@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Trees, RefreshCw, Check, Info 
 } from 'lucide-react';
 import type { UserProfile, CarbonData } from '../types';
 import { calculateCarbonFootprint, calculateSavings } from '../utils/carbonCalculator';
+import { useSandboxSim } from '../hooks/useSandboxSim';
 
 interface SandboxProps {
   profile: UserProfile;
@@ -13,23 +14,13 @@ interface SandboxProps {
 export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }) => {
   const currentData = profile.currentData;
 
-  const fallbackData: CarbonData = {
-    commuteMode: 'transit',
-    weeklyCommuteKm: 50,
-    yearlyFlights: 1,
-    yearlyLongFlights: 0,
-    electricitySource: 'grid_mixed',
-    monthlyElectricBill: 50,
-    heatingFuel: 'natural_gas',
-    homeSizeSqM: 80,
-    dietType: 'moderate_meat',
-    foodWasteLevel: 'medium',
-    recyclingHabits: 'some',
-    shoppingFrequency: 'average'
-  };
-
-  // Create temporary sandbox data state initialized with current profile data
-  const [sandboxData, setSandboxData] = useState<CarbonData>(currentData || fallbackData);
+  const {
+    sandboxData,
+    handleSelect,
+    handleSliderChange,
+    handleReset,
+    handleApply
+  } = useSandboxSim(profile, onUpdateProfileData);
 
   if (!currentData) {
     return (
@@ -45,22 +36,6 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
     currentData,
     sandboxData
   );
-
-  const handleSelect = <K extends keyof CarbonData>(key: K, value: CarbonData[K]) => {
-    setSandboxData(prev => ({ ...prev, [key]: value }));
-  };
-
-  const handleSliderChange = (key: keyof CarbonData, val: number) => {
-    setSandboxData(prev => ({ ...prev, [key]: val }));
-  };
-
-  const handleReset = () => {
-    setSandboxData({ ...currentData });
-  };
-
-  const handleApply = () => {
-    onUpdateProfileData(sandboxData);
-  };
 
   return (
     <div className="main-content">
@@ -324,7 +299,7 @@ export const Sandbox: React.FC<SandboxProps> = ({ profile, onUpdateProfileData }
 
         {/* Live Simulation Results */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <div className="glass-card sandbox-results-panel">
+          <div className="glass-card sandbox-results-panel" aria-live="polite">
             <Trees size={48} style={{ color: 'var(--primary)', marginBottom: '8px' }} aria-hidden="true" />
             <h3 style={{ fontSize: '20px' }}>Potential Annual Savings</h3>
             <div className="savings-highlight">
