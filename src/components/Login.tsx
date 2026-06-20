@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../utils/supabaseClient';
 import { Shield, Mail, Lock, User, AlertTriangle, ArrowRight, Sparkles, Check } from 'lucide-react';
+import { Warp } from "@paper-design/shaders-react";
 
 interface LoginProps {
   onBypassAuth: () => void;
@@ -95,7 +96,23 @@ export const Login: React.FC<LoginProps> = ({ onBypassAuth }) => {
 
   return (
     <div className="login-wrapper">
-      <div className="login-card glass-card">
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 1, pointerEvents: 'none' }}>
+        <Warp
+          style={{ width: "100%", height: "100%" }}
+          proportion={0.45}
+          softness={1}
+          distortion={0.25}
+          swirl={0.8}
+          swirlIterations={10}
+          shape="checks"
+          shapeScale={0.1}
+          scale={1}
+          rotation={0}
+          speed={1}
+          colors={["hsl(203, 100%, 62%)", "hsl(255, 100%, 72%)", "hsl(158, 99%, 59%)", "hsl(264, 100%, 61%)"]}
+        />
+      </div>
+      <div className="login-card glass-card" style={{ position: 'relative', zIndex: 10 }}>
         {/* Logo Section */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px', textAlign: 'center' }}>
           <div style={{ 
