@@ -268,6 +268,8 @@ Guidelines:
 
           {/* Messages Wrapper */}
           <div 
+            role="log"
+            aria-live="polite"
             style={{ 
               flexGrow: 1, 
               overflowY: 'auto', 
@@ -293,6 +295,8 @@ Guidelines:
                   }}
                 >
                   <div
+                    role="img"
+                    aria-label={isPlayer ? "Your avatar" : "Ecodroid AI avatar"}
                     style={{
                       width: '32px',
                       height: '32px',

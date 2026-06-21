@@ -106,7 +106,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ profile, onNavigateToHabit
                   stroke: netEmissions === 0 ? 'var(--primary)' : netEmissions <= 2.0 ? 'var(--primary)' : netEmissions <= 5.0 ? 'var(--secondary)' : '#ef4444'
                 }} 
                 role="progressbar"
-                aria-valuenow={netEmissions}
+                aria-valuenow={Math.min(15, netEmissions)}
                 aria-valuemin={0}
                 aria-valuemax={15}
                 aria-label="Net Carbon Footprint Progress"
